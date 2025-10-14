@@ -4,18 +4,20 @@
  */
 package Domain;
 
+import java.awt.Graphics;
 import java.util.Random;
 
 /**
  *
  * @author emily
  */
-public class PortalJurasico {
+public class PortalJurasico extends Casilla{
     private Random random;
 
-    public PortalJurasico(Random random) {
-        this.random = random;
+    public PortalJurasico(int id) {
+        super(id);
     }
+
 
     public Random getRandom() {
         return random;
@@ -23,6 +25,16 @@ public class PortalJurasico {
 
     public void setRandom(Random random) {
         this.random = random;
+    }
+
+    @Override
+    public void efecto() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void dibujar(Graphics g) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
 }//clase

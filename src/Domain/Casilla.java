@@ -4,10 +4,27 @@
  */
 package Domain;
 
+import java.awt.Graphics;
+
 /**
  *
  * @author emily
  */
-public class Casilla {
+public abstract class Casilla {
+    private int id;
+
+    public Casilla(int id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
     
+    public abstract void efecto();
+    public abstract  void dibujar(Graphics g);
 }//clase

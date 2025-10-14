@@ -4,6 +4,8 @@
  */
 package Domain;
 
+import java.awt.Graphics;
+
 /**
  *
  * @author emily
@@ -33,4 +35,5 @@ public abstract class Entidad {
         this.posX = posX;
     }
     
+    public abstract void dibujar(Graphics g);
 }//clase

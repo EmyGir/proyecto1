@@ -11,13 +11,15 @@ import java.util.Timer;
  *
  * @author emily
  */
-public class Reto {
+public class Reto extends Carta{
     private Timer timer;
     private ArrayList<String>problemas;
 
-    public Reto() {
+    public Reto(int id) {
+        super(id);
     }
 
+    
     public Timer getTimer() {
         return timer;
     }
@@ -32,6 +34,11 @@ public class Reto {
 
     public void setProblemas(ArrayList<String> problemas) {
         this.problemas = problemas;
+    }
+
+    @Override
+    public void efecto() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
     

@@ -4,6 +4,7 @@
  */
 package Domain;
 
+import java.awt.Graphics;
 import java.util.ArrayList;
 
 /**
@@ -11,14 +12,7 @@ import java.util.ArrayList;
  * @author emily
  */
 public class Tablero {
-    private ArrayList<Casilla>casillas;
-    private Jugador[] jugadores;
-    private Dado dado;
-    private Jugador ganador;
-
-    public Tablero(Jugador[] jugadores) {
-        this.jugadores = jugadores;
-    }
+     private ArrayList<Casilla>casillas;
 
     public ArrayList<Casilla> getCasillas() {
         return casillas;
@@ -27,31 +21,7 @@ public class Tablero {
     public void setCasillas(ArrayList<Casilla> casillas) {
         this.casillas = casillas;
     }
-
-    public Jugador[] getJugadores() {
-        return jugadores;
+    public void dibujar(Graphics g){
+        
     }
-
-    public void setJugadores(Jugador[] jugadores) {
-        this.jugadores = jugadores;
-    }
-
-    public Dado getDado() {
-        return dado;
-    }
-
-    public void setDado(Dado dado) {
-        this.dado = dado;
-    }
-
-    public Jugador getGanador() {
-        return ganador;
-    }
-
-    public void setGanador(Jugador ganador) {
-        this.ganador = ganador;
-    }
-    
-   
-    
-}//clase
+}

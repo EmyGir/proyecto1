@@ -8,9 +8,16 @@ package Domain;
  *
  * @author emily
  */
-public class Castigo {
+public class Castigo extends Carta{
 
-    public Castigo() {
+    public Castigo(int id) {
+        super(id);
+    }
+
+   
+    @Override
+    public void efecto() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
 }//clase

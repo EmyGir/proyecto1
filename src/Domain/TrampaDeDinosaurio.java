@@ -8,9 +8,17 @@ package Domain;
  *
  * @author emily
  */
-public class TrampaDeDinosaurio {
+public class TrampaDeDinosaurio extends Carta{
 
-    public TrampaDeDinosaurio() {
+    public TrampaDeDinosaurio(int id) {
+        super(id);
+    }
+
+   
+
+    @Override
+    public void efecto() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
 }//clase

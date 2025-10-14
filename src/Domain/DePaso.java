@@ -4,10 +4,26 @@
  */
 package Domain;
 
+import java.awt.Graphics;
+
 /**
  *
  * @author emily
  */
-public class DePaso {
+public class DePaso extends Casilla{
+
+    public DePaso(int id) {
+        super(id);
+    }
+
+    @Override
+    public void efecto() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void dibujar(Graphics g) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     
 }//clase

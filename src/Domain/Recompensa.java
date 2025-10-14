@@ -8,9 +8,16 @@ package Domain;
  *
  * @author emily
  */
-public class Recompensa {
+public class Recompensa extends Carta{
 
-    public Recompensa() {
+    public Recompensa(int id) {
+        super(id);
     }
-    
+
+    @Override
+    public void efecto() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+   
 }//clase

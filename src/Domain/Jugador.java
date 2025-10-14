@@ -4,24 +4,28 @@
  */
 package Domain;
 
+import java.awt.Graphics;
 import java.awt.Image;
 
 /**
  *
  * @author emily
  */
-public class Jugador {
+public class Jugador extends Entidad{
     private String nombre;
     private boolean turno;
     private Image ficha;
     private int paso;
 
-    public Jugador(String nombre, boolean turno, Image ficha) {
+    public Jugador(String nombre, boolean turno, Image ficha, int paso, int posY, int posX) {
+        super(posY, posX);
         this.nombre = nombre;
         this.turno = turno;
         this.ficha = ficha;
-        this.paso=0;
-    }//constructor
+        this.paso = paso;
+    }
+
+  
 
     public String getNombre() {
         return nombre;
@@ -58,6 +62,11 @@ public class Jugador {
     @Override
     public String toString() {
         return "Jugador{" + "nombre=" + nombre + ", turno=" + turno + ", ficha=" + ficha + ", paso=" + paso + '}';
+    }
+
+    @Override
+    public void dibujar(Graphics g) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
     

@@ -5,33 +5,21 @@
 package Domain;
 
 import java.awt.Graphics;
-import java.awt.Image;
 import java.util.ArrayList;
 
 /**
  *
  * @author emily
  */
-public class Dado extends Entidad{
-    private ArrayList<Image> caras;
+public class Mazo extends Entidad{
+    private ArrayList<Carta>cartas;
 
-    public Dado(int posY, int posX) {
+    public Mazo(int posY, int posX) {
         super(posY, posX);
-    }
-
-    
-
-    public ArrayList<Image> getCaras() {
-        return caras;
-    }
-
-    public void setCaras(ArrayList<Image> caras) {
-        this.caras = caras;
     }
 
     @Override
     public void dibujar(Graphics g) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
-    
 }//clase

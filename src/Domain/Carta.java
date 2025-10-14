@@ -8,7 +8,7 @@ package Domain;
  *
  * @author emily
  */
-public class Carta {
+public abstract class Carta {
     private int id;
 
     public Carta(int id) {
@@ -22,5 +22,5 @@ public class Carta {
     public void setId(int id) {
         this.id = id;
     }
-    
+   public abstract  void efecto();
 }//private

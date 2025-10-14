@@ -4,24 +4,40 @@
  */
 package Domain;
 
+import java.awt.Graphics;
 import java.util.ArrayList;
 
 /**
  *
  * @author emily
  */
-public class DeHallazgo {
-    private ArrayList<Carta>cartas;
+public class DeHallazgo extends Casilla{
+    private Mazo mazo;
 
-    public DeHallazgo() {
+    public DeHallazgo(int id) {
+        super(id);
     }
 
-    public ArrayList<Carta> getCartas() {
-        return cartas;
+    
+
+    public Mazo getMazo() {
+        return mazo;
     }
 
-    public void setCartas(ArrayList<Carta> cartas) {
-        this.cartas = cartas;
+    public void setMazo(Mazo mazo) {
+        this.mazo = mazo;
     }
+
+    @Override
+    public void efecto() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void dibujar(Graphics g) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+   
     
 }//clase
