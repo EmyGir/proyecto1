@@ -4,6 +4,7 @@
  */
 package Domain;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Random;
 
@@ -14,8 +15,8 @@ import java.util.Random;
 public class PortalJurasico extends Casilla{
     private Random random;
 
-    public PortalJurasico(int id) {
-        super(id);
+    public PortalJurasico(int id, int posY, int posX) {
+        super(id, posY, posX);
     }
 
 
@@ -27,14 +28,29 @@ public class PortalJurasico extends Casilla{
         this.random = random;
     }
 
-    @Override
-    public void efecto() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    
+    public void efectoX(Jugador jugadorEnTurno, Jugador JugadorSinTurno){
+        
+     int cantidadDePasos=jugadorEnTurno.getPaso()- JugadorSinTurno.getPaso();
+     jugadorEnTurno.setPaso(jugadorEnTurno.getPaso()+cantidadDePasos);
+     jugadorEnTurno.setPosX(jugadorEnTurno.getPosX()*cantidadDePasos);
+        
+    }//efecto
+    
+      public void efectoY(Jugador jugadorEnTurno, Jugador JugadorSinTurno){
+        
+     int cantidadDePasos=jugadorEnTurno.getPaso()- JugadorSinTurno.getPaso();
+     jugadorEnTurno.setPaso(jugadorEnTurno.getPaso()+cantidadDePasos);
+     jugadorEnTurno.setPosY(jugadorEnTurno.getPosY()*cantidadDePasos);
+    
+        
+    }//efecto
 
-    @Override
-    public void dibujar(Graphics g) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    public void dibujar(Graphics g, int x, int y, int ancho, int alto) {
+        // Dibujar rectángulo base
+    g.setColor(Color.ORANGE);
+    g.fillRect(x, y, ancho, alto);
+    g.setColor(Color.BLACK);
+    g.drawRect(x, y, ancho, alto);}
     
 }//clase

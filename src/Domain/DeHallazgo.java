@@ -4,6 +4,7 @@
  */
 package Domain;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
@@ -11,14 +12,13 @@ import java.util.ArrayList;
  *
  * @author emily
  */
-public class DeHallazgo extends Casilla{
+public class DeHallazgo extends Casilla {
+
     private Mazo mazo;
 
-    public DeHallazgo(int id) {
-        super(id);
+    public DeHallazgo(int id, int posY, int posX) {
+        super(id, posY, posX);
     }
-
-    
 
     public Mazo getMazo() {
         return mazo;
@@ -29,15 +29,25 @@ public class DeHallazgo extends Casilla{
     }
 
     @Override
+    
     public void efecto() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+        int random =(int)(Math.random()* this.mazo.getCartas().size());
+        this.mazo.getCartas().get(random).efecto();
+         
+    }//efecto
+    
+   
 
     @Override
-    public void dibujar(Graphics g) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void dibujar(Graphics g, int x, int y, int ancho, int alto) {
+        // Dibujar rectángulo base
+    g.setColor(Color.YELLOW);
+    g.fillRect(x, y, ancho, alto);
+    g.setColor(Color.BLACK);
+    g.drawRect(x, y, ancho, alto);
+
     }
 
-   
-    
+  
+
 }//clase

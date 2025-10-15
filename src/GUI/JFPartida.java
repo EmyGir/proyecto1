@@ -4,6 +4,7 @@
  */
 package GUI;
 
+import Domain.Jugador;
 import javax.swing.JFrame;
 
 /**
@@ -11,15 +12,16 @@ import javax.swing.JFrame;
  * @author emily
  */
 public class JFPartida extends JFrame{
-
-    public JFPartida() {
-         setTitle("VentanaNullLayout");
-    setSize(800, 600);
-    setLocation(400, 100);
-    setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    setLayout(null);
-   
-    setVisible(true);
+private Jugador[] jugadores;
+    public JFPartida(Jugador[] jugadors ) {
+       this.jugadores=jugadors;
+               
+    
+        add(new JPPartida(this.jugadores));
+        pack();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+       setLocationRelativeTo(null);
+        setVisible(true);
     }
     
 }

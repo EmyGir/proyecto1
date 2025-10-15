@@ -4,6 +4,7 @@
  */
 package Domain;
 
+import java.awt.Color;
 import java.awt.Graphics;
 
 /**
@@ -12,18 +13,33 @@ import java.awt.Graphics;
  */
 public class DePaso extends Casilla{
 
-    public DePaso(int id) {
-        super(id);
+    public DePaso(int id, int posY, int posX) {
+        super(id, posY, posX);
     }
+    
+  
+    
+    public void efectoX(Jugador jugadorEnTurno, int numeroDado) {
+        
+        jugadorEnTurno.setPosX(jugadorEnTurno.getPosX()+(50*numeroDado));
+        
+        jugadorEnTurno.setPaso(jugadorEnTurno.getPaso()+numeroDado);
+    }//efecto x
+    
+     public void efectoY(Jugador jugadorEnTurno, int numeroDado) {
+        
+        jugadorEnTurno.setPosY(jugadorEnTurno.getPosY()+(50*numeroDado));
+        
+       jugadorEnTurno.setPaso(jugadorEnTurno.getPaso()+numeroDado);
+    }//efect y
 
     @Override
-    public void efecto() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
-
-    @Override
-    public void dibujar(Graphics g) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+    public void dibujar(Graphics g, int x, int y, int ancho, int alto) {
+        // Dibujar rectángulo base
+    g.setColor(Color.green);
+    g.fillRect(x, y, ancho, alto);
+    g.setColor(Color.BLACK);
+    g.drawRect(x, y, ancho, alto);
+    }//dibujar
     
 }//clase
