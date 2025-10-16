@@ -14,7 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -24,23 +24,52 @@ import javax.swing.Timer;
  */
 public class JPPartida extends JPanel implements KeyListener, ActionListener{
 private Timer timer;
-
+private JButton jbDado;
 private Partida partida;
     public JPPartida(Jugador[] jugadors) {
         setPreferredSize(new Dimension(700, 800));
         setBackground(Color.BLACK);
         setFocusable(true);
-         addKeyListener(this);
-      
+        addKeyListener(this);
+        setLayout(null);
+        //inicializar partida
         this.partida= new Partida(jugadors);
-        this.timer = new Timer(30,  this);
-        this.timer.start();
+        //boton
+        this.jbDado= new JButton("Lanzar");
+        this.jbDado.setBounds(500, 350, 100, 30);
+        this.jbDado.addActionListener(this);
+        add(this.jbDado);
+        
+       //agregar boton
+        this.timer = new Timer(100, this);
+        
+       this.timer = new Timer(100, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Esto se ejecuta CADA 100ms cuando el timer está activo
+                actualizarAnimacion();
+            }
+        });
 
+    }
+    private void actualizarAnimacion() {
+        // Actualizar movimiento del dado
+        this.partida.getDado().movimiento();
+        
+        // Redibujar
+        repaint();
+        
+        // Verificar si la animación terminó
+        if (!this.partida.getDado().estaAnimando()) {
+            this.timer.stop();
+            System.out.println("Animación terminada");
+            // Aquí puedes avanzar el turno, mover ficha, etc.
+        }
     }
 @Override
        protected void paintComponent(Graphics g) {
              super.paintComponent(g);
-             this.partida.getDado().lanzar();
+             this.partida.getDado().dibujar(g);
              this.partida.getTablero().dibujar(g);
              this.partida.getDado().dibujar(g);
              
@@ -62,6 +91,15 @@ private Partida partida;
 
     @Override
     public void actionPerformed(ActionEvent e) {
-    }
+        if(e.getSource()==this.jbDado){
+           
+         this.partida.getDado().lanzar();
+          this.timer.start();       
+        }//if boton lanzar
+        repaint();
+       
+        
+            
+    }//actionPerformed
     
-}
+}//clase

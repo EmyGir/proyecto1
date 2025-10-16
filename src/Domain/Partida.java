@@ -95,7 +95,8 @@ public class Partida {
 
     public Tablero getTablero() {
         crearTableroPredeterminado();
-        crearTableroAleatorio();
+       // crearTableroAleatorio();
+       //esto va en registro
         return tablero;
     }
 
