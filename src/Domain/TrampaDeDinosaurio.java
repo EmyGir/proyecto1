@@ -4,21 +4,33 @@
  */
 package Domain;
 
+import java.awt.Color;
+import java.awt.Graphics;
+
 /**
  *
  * @author emily
  */
-public class TrampaDeDinosaurio extends Carta{
+public class TrampaDeDinosaurio extends Casilla{
 
-    public TrampaDeDinosaurio(int id) {
-        super(id);
+    public TrampaDeDinosaurio(int id, int posY, int posX) {
+        super(id, posY, posX);
     }
 
    
 
-    @Override
-    public void efecto() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
     
+    public void efecto(Jugador jugadorEnTurno) {
+      jugadorEnTurno.setPaso(0);
+      jugadorEnTurno.setPosX(50);
+      jugadorEnTurno.setPosY(50);
+    }
+
+  public void dibujar(Graphics g, int x, int y, int ancho, int alto) {
+        // Dibujar rectángulo base
+    g.setColor(Color.RED);
+    g.fillRect(x, y, ancho, alto);
+    g.setColor(Color.BLACK);
+    g.drawRect(x, y, ancho, alto);
+  }
 }//clase

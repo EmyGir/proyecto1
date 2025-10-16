@@ -10,13 +10,14 @@ import java.awt.Graphics;
  *
  * @author emily
  */
-public abstract class Casilla {
-    private int id;
+public abstract class Casilla extends Entidad{
+    protected int id;
 
-    public Casilla(int id) {
+    public Casilla(int id, int posY, int posX) {
+        super(posY, posX);
         this.id = id;
     }
-
+  
     public int getId() {
         return id;
     }
@@ -25,6 +26,9 @@ public abstract class Casilla {
         this.id = id;
     }
     
-    public abstract void efecto();
-    public abstract  void dibujar(Graphics g);
+    public  void efecto(){
+        
+    }
+    
+    public void dibujar(Graphics g, int x, int y, int ancho, int alto){}
 }//clase

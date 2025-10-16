@@ -4,6 +4,8 @@
  */
 package Main;
 
+import Domain.Jugador;
+import GUI.JFPartida;
 import GUI.JFRegistro;
 import GUI.RegistroJugador;
 
@@ -19,7 +21,12 @@ public class Proyecto1 {
      */
    /*
     public static void main(String[] args) {
+          Jugador[] jugadores = new Jugador[2];
+          jugadores[0]= new Jugador("prueba1", true, null, 0, 0, 0);
+          jugadores[1]= new Jugador("prueba2", true, null, 0, 0, 0);
+          
         JFRegistro fRegistro = new JFRegistro();
+        JFPartida fPartida= new JFPartida(jugadores);
     }
 */
     

@@ -11,8 +11,8 @@ import java.awt.Graphics;
  * @author emily
  */
 public abstract class Entidad {
-    private int posY;
-    private int posX;
+    protected int posY;
+    protected int posX;
 
     public Entidad(int posY, int posX) {
         this.posY = posY;
@@ -35,5 +35,7 @@ public abstract class Entidad {
         this.posX = posX;
     }
     
-    public abstract void dibujar(Graphics g);
+    public  void dibujar(Graphics g){
+        
+    };
 }//clase
