@@ -5,6 +5,8 @@
 package Main;
 
 import GUI.JFRegistro;
+import GUI.RegistroJugador;
+
 
 /**
  *
@@ -15,8 +17,16 @@ public class Proyecto1 {
     /**
      * @param args the command line arguments
      */
+   /*
     public static void main(String[] args) {
         JFRegistro fRegistro = new JFRegistro();
     }
+*/
     
+     public static void main(String[] args) {
+        
+          RegistroJugador ventana = new RegistroJugador();
+        ventana.setVisible(true);
+    }
+
 }

@@ -17,8 +17,8 @@ public class Jugador extends Entidad{
     private Image ficha;
     private int paso;
 
-    public Jugador(String nombre, boolean turno, Image ficha, int paso, int posY, int posX) {
-        super(posY, posX);
+    public Jugador(String nombre, boolean turno, Image ficha, int paso) {
+        super(0, 0);
         this.nombre = nombre;
         this.turno = turno;
         this.ficha = ficha;
@@ -58,7 +58,7 @@ public class Jugador extends Entidad{
     public void setPaso(int paso) {
         this.paso = paso;
     }
-
+    
     @Override
     public String toString() {
         return "Jugador{" + "nombre=" + nombre + ", turno=" + turno + ", ficha=" + ficha + ", paso=" + paso + '}';
