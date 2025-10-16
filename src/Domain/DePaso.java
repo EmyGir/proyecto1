@@ -15,6 +15,7 @@ public class DePaso extends Casilla{
 
     public DePaso(int id, int posY, int posX) {
         super(id, posY, posX);
+        
     }
     
   

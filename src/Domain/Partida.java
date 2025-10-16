@@ -5,20 +5,23 @@
 package Domain;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *
  * @author emily
  */
 public class Partida {
-    private Tablero tablero;
+   private Tablero tablero= new Tablero();
     private Jugador[] jugadores;
-    private Dado dado;
+    private Dado dado= new Dado(200, 500);
+     
     
 
     public Partida(Jugador[] jugadores) {
         this.jugadores = jugadores;
         this.tablero=new Tablero();
+      
     }
 
     public Jugador[] getJugadores() {
@@ -36,7 +39,7 @@ public class Partida {
     public void setDado(Dado dado) {
         this.dado = dado;
     }
-     public Tablero crearTableroPredeterminado(){
+     public void crearTableroPredeterminado(){
           for (int i = 0; i < this.tablero.getCasillas().length; i++) {
             for (int j = 0; j < this.tablero.getCasillas()[i].length; j++) {
                 
@@ -60,8 +63,45 @@ public class Partida {
                  this.tablero.getCasillas()[i][j]= new DePaso(i, j, j);//verde
             }
         }
-          return this.tablero;
+         setTablero(this.tablero);
      } 
+     
+     public void crearTableroAleatorio(){
+      
+          for (int i = 0; i < this.tablero.getCasillas().length; i++) {
+            for (int j = 0; j < this.tablero.getCasillas()[i].length; j++) {
+                  int resultado = (int) (Math.random() * (4-1+1) + 1);
+                
+                switch (resultado) {
+                    case 2:
+                        this.tablero.getCasillas()[i][j]= new TrampaDeDinosaurio(i, j, j);//rojo
+                        break;
+                    case 4:
+                        this.tablero.getCasillas()[i][j]= new DeHallazgo(i, j, j);//amarillo
+                        break;
+                    case 3:
+                        this.tablero.getCasillas()[i][j]= new PortalJurasico(i, j, j);//naranja
+                        break;
+                    case 1:
+                        this.tablero.getCasillas()[i][j]= new DePaso(i, j, j);//verde
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+          setTablero(this.tablero);
+     } 
+
+    public Tablero getTablero() {
+        crearTableroPredeterminado();
+        crearTableroAleatorio();
+        return tablero;
+    }
+
+    public void setTablero(Tablero tablero) {
+        this.tablero = tablero;
+    }
 
    
     

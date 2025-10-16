@@ -18,6 +18,7 @@ public class DeHallazgo extends Casilla {
 
     public DeHallazgo(int id, int posY, int posX) {
         super(id, posY, posX);
+      
     }
 
     public Mazo getMazo() {

@@ -7,6 +7,7 @@ package Domain;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *
@@ -15,9 +16,12 @@ import java.util.ArrayList;
 public class Tablero {
 
     private Casilla[][] casillas;
+   
+    
 
     public Tablero() {
         this.casillas = new Casilla[8][8];
+        
 
     }
 
@@ -56,7 +60,7 @@ public class Tablero {
                     // Dibujar número
                     g.setColor(Color.BLACK);
                     casillas[filaInicio][j].setId(contador);
-                    g.drawString(String.valueOf(casillas[filaInicio][j].getId()),
+                    g.drawString(String.valueOf(contador),
                             x + anchoCasilla / 2 - 5, y + altoCasilla / 2 + 5);
                             
                     contador++;
@@ -75,7 +79,8 @@ public class Tablero {
                     // Dibujar número
                     g.setColor(Color.BLACK);
                     casillas[i][columnaFin].setId(contador);
-                    g.drawString(String.valueOf(casillas[i][columnaFin].getId()),
+                    
+                    g.drawString(String.valueOf(contador),
                             x + anchoCasilla / 2 - 5, y + altoCasilla / 2 + 5);
                 }
                 y += altoCasilla; // Mover hacia abajo
@@ -93,7 +98,7 @@ public class Tablero {
                         // Dibujar número
                         g.setColor(Color.BLACK);
                         casillas[filaFin][j].setId(contador);
-                        g.drawString(String.valueOf(casillas[filaFin][j].getId()),
+                         g.drawString(String.valueOf(contador),
                                 x + anchoCasilla / 2 - 5, y + altoCasilla / 2 + 5);
                         contador++;
                     }
@@ -114,7 +119,7 @@ public class Tablero {
                         // Dibujar número
                         g.setColor(Color.BLACK);
                         casillas[i][columnaInicio].setId(contador);
-                        g.drawString(String.valueOf(casillas[i][columnaInicio].getId()),
+                        g.drawString(String.valueOf(contador),
                                 x + anchoCasilla / 2 - 5, y + altoCasilla / 2 + 5);
 
                         contador++;

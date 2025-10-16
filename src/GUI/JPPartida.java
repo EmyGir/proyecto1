@@ -24,7 +24,7 @@ import javax.swing.Timer;
  */
 public class JPPartida extends JPanel implements KeyListener, ActionListener{
 private Timer timer;
-private Tablero tablero= new Tablero();
+
 private Partida partida;
     public JPPartida(Jugador[] jugadors) {
         setPreferredSize(new Dimension(700, 800));
@@ -33,16 +33,17 @@ private Partida partida;
          addKeyListener(this);
       
         this.partida= new Partida(jugadors);
-       this.tablero= partida.crearTableroPredeterminado();
-       
-         this.timer = new Timer(30,  this);
+        this.timer = new Timer(30,  this);
         this.timer.start();
 
     }
 @Override
        protected void paintComponent(Graphics g) {
              super.paintComponent(g);
-             this.tablero.dibujar(g);
+             this.partida.getDado().lanzar();
+             this.partida.getTablero().dibujar(g);
+             this.partida.getDado().dibujar(g);
+             
 
        }//dibujar
       
