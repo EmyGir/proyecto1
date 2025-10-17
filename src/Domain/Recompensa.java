@@ -15,7 +15,8 @@ public class Recompensa extends Carta{
     }
 
     @Override
-    public void efecto() {
+    public void efecto(Jugador jugador) {
+        System.out.println("Domain.Recompensa.efecto()");
     }
 
    

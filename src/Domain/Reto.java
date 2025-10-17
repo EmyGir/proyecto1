@@ -37,7 +37,8 @@ public class Reto extends Carta{
     }
 
     @Override
-    public void efecto() {
+    public void efecto(Jugador jugador) {
+        System.out.println("Domain.Reto.efecto()");
     }
     
     

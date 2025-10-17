@@ -144,5 +144,8 @@ public class Partida {
            }//forj
        }//fori
    }//validar casilla
+   
+   
+
     
 }//clase
