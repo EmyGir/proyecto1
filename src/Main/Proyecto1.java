@@ -19,21 +19,22 @@ public class Proyecto1 {
     /**
      * @param args the command line arguments
      */
-   /*
+   
     public static void main(String[] args) {
-          Jugador[] jugadores = new Jugador[2];
-          jugadores[0]= new Jugador("prueba1", true, null, 0, 0, 0);
-          jugadores[1]= new Jugador("prueba2", true, null, 0, 0, 0);
+         /* Jugador[] jugadores = new Jugador[2];
+          jugadores[0]= new Jugador("prueba1", true, null, 0);
+          jugadores[1]= new Jugador("prueba2", true, null, 0);
           
         JFRegistro fRegistro = new JFRegistro();
         JFPartida fPartida= new JFPartida(jugadores);
     }
-*/
-    
-     public static void main(String[] args) {
-        
-          RegistroJugador ventana = new RegistroJugador();
+    */
+     
+         RegistroJugador ventana = new RegistroJugador();{
         ventana.setVisible(true);
     }
 
+    }
 }
+
+ 
