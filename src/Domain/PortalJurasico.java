@@ -17,6 +17,7 @@ public class PortalJurasico extends Casilla{
 
     public PortalJurasico(int id, int posY, int posX) {
         super(id, posY, posX);
+        
     }
 
 

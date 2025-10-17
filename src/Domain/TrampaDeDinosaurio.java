@@ -15,6 +15,7 @@ public class TrampaDeDinosaurio extends Casilla{
 
     public TrampaDeDinosaurio(int id, int posY, int posX) {
         super(id, posY, posX);
+       
     }
 
    
