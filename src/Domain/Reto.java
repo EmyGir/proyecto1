@@ -38,7 +38,6 @@ public class Reto extends Carta{
 
     @Override
     public void efecto() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
     

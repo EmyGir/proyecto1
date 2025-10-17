@@ -22,36 +22,36 @@ import javax.swing.Timer;
  *
  * @author emily
  */
-public class JPPartida extends JPanel implements  ActionListener{
-private Timer timer;
-private JButton jbDado;
-private JButton jbMazo;
-private Partida partida;
+public class JPPartida extends JPanel implements ActionListener {
+
+    private Timer timer;
+    private JButton jbDado;
+    private JButton jbMazo;
+    private Partida partida;
+
     public JPPartida(Jugador[] jugadors) {
         setPreferredSize(new Dimension(700, 800));
         setBackground(Color.BLACK);
         setFocusable(true);
-       
+
         setLayout(null);
         //inicializar partida
-        this.partida= new Partida(jugadors);
+        this.partida = new Partida(jugadors);
         //botones
-        this.jbDado= new JButton("Lanzar");
+        this.jbDado = new JButton("Lanzar");
         this.jbDado.setBounds(500, 350, 100, 30);
         this.jbDado.addActionListener(this);
         add(this.jbDado);
-        
-        this.jbMazo= new JButton("Escoger Carta");
+
+        this.jbMazo = new JButton("Escoger Carta");
         this.jbMazo.setBounds(50, 680, 150, 30);
         this.jbMazo.addActionListener(this);
         add(this.jbMazo);
-        
-        
-        
-       //agregar timer
+
+        //agregar timer
         this.timer = new Timer(100, this);
-        
-       this.timer = new Timer(100, new ActionListener() {
+
+        this.timer = new Timer(100, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Esto se ejecuta CADA 100ms cuando el timer está activo
@@ -60,13 +60,14 @@ private Partida partida;
         });
 
     }
+
     private void actualizarAnimacion() {
         // Actualizar movimiento del dado
         this.partida.getDado().movimiento();
-        
+
         // Redibujar
         repaint();
-        
+
         // Verificar si la animación terminó
         if (!this.partida.getDado().estaAnimando()) {
             this.timer.stop();
@@ -74,42 +75,42 @@ private Partida partida;
             // Aquí puedes avanzar el turno, mover ficha, etc.
         }
     }
-@Override
-       protected void paintComponent(Graphics g) {
-             super.paintComponent(g);
-             this.partida.getDado().dibujar(g);
-             this.partida.getTablero().dibujar(g);
-             this.partida.getDado().dibujar(g);
-             this.partida.getMazo().dibujar(g);
-             
 
-       }//dibujar
-      
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        this.partida.getDado().dibujar(g);
+        this.partida.getTablero().dibujar(g);
+        this.partida.getDado().dibujar(g);
+        this.partida.getMazo().dibujar(g);
 
-   
+    }//dibujar
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource()==this.jbDado){
-           
-         this.partida.getDado().lanzar();
-          this.timer.start();       
-        }//if boton lanzar
-        
-         if(e.getSource()==this.jbMazo){
-             Jugador jugadorEnTurno=null;
-          
-         for (int i = 0; i <this.partida.getJugadores().length; i++) {
-           if(this.partida.getJugadores()[i].isTurno())
-                jugadorEnTurno=this.partida.getJugadores()[i];
-           
-         } //for
-          this.partida.getMazo().escogerCarta(jugadorEnTurno);
-          this.timer.start();       
-        }//if boton mazo
+      if (e.getSource() == this.jbDado) {
+        this.partida.getDado().lanzar();
+        this.timer.start(); // ← solo una vez
         repaint();
-       
-        
-            
+        return;
+    }
+
+    if (e.getSource() == this.jbMazo) {
+        Jugador jugadorEnTurno = null;
+        for (Jugador j : this.partida.getJugadores()) {
+            if (j.isTurno()) {
+                jugadorEnTurno = j;
+                break; // ← importantísimo
+            }
+        }
+        if (jugadorEnTurno == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "No hay jugador en turno.");
+            return;
+        }
+        this.partida.getMazo().escogerCarta(jugadorEnTurno);
+        repaint();
+    }
+
     }//actionPerformed
-    
+
 }//clase

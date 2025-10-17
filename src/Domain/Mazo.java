@@ -58,9 +58,9 @@ public class Mazo extends Entidad{
             // reponer mazo; usa limpiar=true para barajar desde cero
             rellenarCartas();
         }
-        int idx = (int) (Math.random() * (8-1+1) + 1);
-        Carta carta = cartas.remove(idx);
        
+       Carta carta = cartas.remove(cartas.size() - 1); 
+            System.out.println("Domain.Mazo.escogerCarta()");
         carta.efecto();  
         return carta;
     }
