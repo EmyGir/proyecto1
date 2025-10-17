@@ -4,9 +4,11 @@
  */
 package Domain;
 
+import GUI.JPPartida;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -31,9 +33,15 @@ public class DeHallazgo extends Casilla {
 
     @Override
     
-    public void efecto() {
-        int random =(int)(Math.random()* this.mazo.getCartas().size());
-        this.mazo.getCartas().get(random).efecto();
+    public void efecto(Jugador jugadorEnTurno) {
+        if (mazo == null) {
+            
+            throw new IllegalStateException("La casilla DeHallazgo no tiene mazo asignado (setMazo).");
+        }
+        JOptionPane.showMessageDialog(null, "¡Hallazgo! Toma una carta del mazo.");
+        
+        mazo.escogerCarta(jugadorEnTurno); 
+    
          
     }//efecto
     

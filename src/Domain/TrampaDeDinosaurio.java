@@ -21,6 +21,7 @@ public class TrampaDeDinosaurio extends Casilla{
    
 
     
+    @Override
     public void efecto(Jugador jugadorEnTurno) {
       jugadorEnTurno.setPaso(0);
       jugadorEnTurno.setPosX(50);

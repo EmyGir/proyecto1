@@ -78,6 +78,11 @@ public class Dado extends Entidad{
       public boolean estaAnimando() {
         return this.animado;
     }
+
+    public int getResultadoFinal() {
+        return resultadoFinal;
+    }
+      
      
     public Image[] getCaras() {
         return caras;

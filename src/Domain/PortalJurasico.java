@@ -30,22 +30,15 @@ public class PortalJurasico extends Casilla{
     }
 
     
-    public void efectoX(Jugador jugadorEnTurno, Jugador JugadorSinTurno){
+    public void efecto(Jugador jugadorEnTurno, Jugador JugadorSinTurno){
         
      int cantidadDePasos=jugadorEnTurno.getPaso()- JugadorSinTurno.getPaso();
      jugadorEnTurno.setPaso(jugadorEnTurno.getPaso()+cantidadDePasos);
-     jugadorEnTurno.setPosX(jugadorEnTurno.getPosX()*cantidadDePasos);
+     
         
     }//efecto
     
-      public void efectoY(Jugador jugadorEnTurno, Jugador JugadorSinTurno){
-        
-     int cantidadDePasos=jugadorEnTurno.getPaso()- JugadorSinTurno.getPaso();
-     jugadorEnTurno.setPaso(jugadorEnTurno.getPaso()+cantidadDePasos);
-     jugadorEnTurno.setPosY(jugadorEnTurno.getPosY()*cantidadDePasos);
-    
-        
-    }//efecto
+      
 
     public void dibujar(Graphics g, int x, int y, int ancho, int alto) {
         // Dibujar rectángulo base

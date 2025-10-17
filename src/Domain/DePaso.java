@@ -20,19 +20,10 @@ public class DePaso extends Casilla{
     
   
     
-    public void efectoX(Jugador jugadorEnTurno, int numeroDado) {
-        
-        jugadorEnTurno.setPosX(jugadorEnTurno.getPosX()+(50*numeroDado));
-        
+    public void efecto(Jugador jugadorEnTurno, int numeroDado) {
         jugadorEnTurno.setPaso(jugadorEnTurno.getPaso()+numeroDado);
     }//efecto x
-    
-     public void efectoY(Jugador jugadorEnTurno, int numeroDado) {
-        
-        jugadorEnTurno.setPosY(jugadorEnTurno.getPosY()+(50*numeroDado));
-        
-       jugadorEnTurno.setPaso(jugadorEnTurno.getPaso()+numeroDado);
-    }//efect y
+ 
 
     @Override
     public void dibujar(Graphics g, int x, int y, int ancho, int alto) {
