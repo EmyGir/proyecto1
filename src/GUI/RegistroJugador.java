@@ -9,11 +9,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
-import javax.swing.JPanel;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Cursor;
+import java.awt.FlowLayout;
+import javax.swing.JDialog;
+import javax.swing.WindowConstants;
 
 
 /**
@@ -30,7 +32,7 @@ public class RegistroJugador extends JFrame {
 
     public RegistroJugador() {
         setTitle("Registro de Jugadores");
-        setSize(500, 500);  
+        setSize(700, 700);  
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(null);
@@ -54,7 +56,7 @@ public class RegistroJugador extends JFrame {
 
         jugador1 = new Jugador(nombreJugador1, true, null, 0);
         
-        fichaJugador1 = elegirFicha();
+        fichaJugador1 = elegirFicha(true);
 
         if (fichaJugador1 == null) {
             JOptionPane.showMessageDialog(this, "Debe seleccionar una ficha.");
@@ -83,14 +85,14 @@ public class RegistroJugador extends JFrame {
         jugador2 = new Jugador(nombreJugador2, false, null, 0);
 
 
-        fichaJugador2 = elegirFicha();
+        fichaJugador2 = elegirFicha(false);
 
         if (fichaJugador2 == null) {
             JOptionPane.showMessageDialog(this, "Debe seleccionar una ficha.");
             return;
         }
 
-    
+
         
 
         jugador2.setFicha(fichaJugador2);
@@ -101,62 +103,73 @@ public class RegistroJugador extends JFrame {
                 "Jugador 2: " + jugador2.getNombre());
     }
 
-    private Image elegirFicha() {
-  
-        JPanel panelFicha = new JPanel();
-        panelFicha.setLayout(null);
-        JLabel labelFicha1 = new JLabel();
-        JLabel labelFicha2 = new JLabel();
+    
+private Image elegirFicha(boolean esJugador1) {
+    final Image[] fichaSeleccionada = {null};
 
+    // Crear diálogo modal para elegir ficha
+    JDialog dialog = new JDialog(this, "Selecciona tu ficha", true);
+    dialog.setSize(350, 200);
+    dialog.setLocationRelativeTo(this);
+    dialog.setLayout(new FlowLayout());
 
-        labelFicha1.setIcon(new ImageIcon(getClass().getResource("/Assets1/Rombo.png")));
-        labelFicha2.setIcon(new ImageIcon(getClass().getResource("/Assets1/Circulo.png")));
+    // Cargar imágenes y escalarlas
+    ImageIcon icono1 = new ImageIcon(getClass().getResource("/Assets/Cuadrado.png"));
+    ImageIcon icono2 = new ImageIcon(getClass().getResource("/Assets/Circulo.png"));
+    Image imagen1 = icono1.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+    Image imagen2 = icono2.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
 
-        labelFicha1.setBounds(0, 0, 100, 100);
-        labelFicha2.setBounds(140, 0, 100, 100);
+    // Labels para mostrar imágenes
+    JLabel labelFicha1 = new JLabel(new ImageIcon(imagen1));
+    JLabel labelFicha2 = new JLabel(new ImageIcon(imagen2));
 
-        labelFicha1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        labelFicha2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    labelFicha1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    labelFicha2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-
-        final boolean[] fichaSeleccionada = {false};
-
-        labelFicha1.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                fichaJugador1 = new ImageIcon(getClass().getResource("/Assets1/Rombo.png")).getImage();
-                fichaSeleccionada[0] = true;
-                JOptionPane.showMessageDialog(null, "Ficha Rombo seleccionada");
-
-                dispose();
+    // Mouse listeners para seleccionar ficha
+    labelFicha1.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            if (fichaJugador1 == null || fichaJugador1 .equals(fichaJugador2)) {
+                javax.swing.JOptionPane.showMessageDialog(dialog, "Esa ficha ya fue seleccionada por el Jugador 1.");
+                return;
             }
-        });
-
-        labelFicha2.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                fichaJugador1 = new ImageIcon(getClass().getResource("/Assets1/Circulo.png")).getImage();
-                fichaSeleccionada[0] = true;
-                JOptionPane.showMessageDialog(null, "Ficha Círculo seleccionada");
- 
-                dispose();
-            }
-        });
-
-        panelFicha.add(labelFicha1);
-        panelFicha.add(labelFicha2);
-
-        while (!fichaSeleccionada[0]) {
-            JOptionPane.showMessageDialog(this, panelFicha, "Selecciona tu ficha", JOptionPane.PLAIN_MESSAGE);
+            fichaSeleccionada[0] = imagen1;
+            dialog.dispose();
         }
+    });
 
-        return fichaJugador1;
+    labelFicha2.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            if (fichaJugador2 == null ||fichaJugador2 .equals(fichaJugador1)) {
+                javax.swing.JOptionPane.showMessageDialog(dialog, "Esa ficha ya fue seleccionada por el Jugador 1.");
+                return;
+            }
+            fichaSeleccionada[0] = imagen2;
+            dialog.dispose();
+        }
+    });
+
+    dialog.add(labelFicha1);
+    dialog.add(labelFicha2);
+
+    dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+    dialog.setVisible(true); // Esto es modal, espera hasta que se cierre
+
+    return fichaSeleccionada[0];
+}
+
+ /*
+
+ while (fichaJugador2 == null ||fichaJugador2 .equals(fichaJugador1)) {
+    if (fichaJugador2 != null && fichaJugador2.equals(fichaJugador1)) {
+        JOptionPane.showMessageDialog(this, "Esa ficha ya fue seleccionada por el Jugador 1. Elige otra.");
     }
+ }
 
 
-
-
-
+*/
 
 
 
