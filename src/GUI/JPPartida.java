@@ -22,25 +22,33 @@ import javax.swing.Timer;
  *
  * @author emily
  */
-public class JPPartida extends JPanel implements KeyListener, ActionListener{
+public class JPPartida extends JPanel implements  ActionListener{
 private Timer timer;
 private JButton jbDado;
+private JButton jbMazo;
 private Partida partida;
     public JPPartida(Jugador[] jugadors) {
         setPreferredSize(new Dimension(700, 800));
         setBackground(Color.BLACK);
         setFocusable(true);
-        addKeyListener(this);
+       
         setLayout(null);
         //inicializar partida
         this.partida= new Partida(jugadors);
-        //boton
+        //botones
         this.jbDado= new JButton("Lanzar");
         this.jbDado.setBounds(500, 350, 100, 30);
         this.jbDado.addActionListener(this);
         add(this.jbDado);
         
-       //agregar boton
+        this.jbMazo= new JButton("Escoger Carta");
+        this.jbMazo.setBounds(50, 680, 150, 30);
+        this.jbMazo.addActionListener(this);
+        add(this.jbMazo);
+        
+        
+        
+       //agregar timer
         this.timer = new Timer(100, this);
         
        this.timer = new Timer(100, new ActionListener() {
@@ -72,23 +80,13 @@ private Partida partida;
              this.partida.getDado().dibujar(g);
              this.partida.getTablero().dibujar(g);
              this.partida.getDado().dibujar(g);
+             this.partida.getMazo().dibujar(g);
              
 
        }//dibujar
       
 
-    @Override
-    public void keyTyped(KeyEvent e) {
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-    }
-
+   
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==this.jbDado){
@@ -96,6 +94,18 @@ private Partida partida;
          this.partida.getDado().lanzar();
           this.timer.start();       
         }//if boton lanzar
+        
+         if(e.getSource()==this.jbMazo){
+             Jugador jugadorEnTurno=null;
+          
+         for (int i = 0; i <this.partida.getJugadores().length; i++) {
+           if(this.partida.getJugadores()[i].isTurno())
+                jugadorEnTurno=this.partida.getJugadores()[i];
+           
+         } //for
+          this.partida.getMazo().escogerCarta(jugadorEnTurno);
+          this.timer.start();       
+        }//if boton mazo
         repaint();
        
         

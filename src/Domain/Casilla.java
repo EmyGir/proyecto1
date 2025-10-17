@@ -26,7 +26,7 @@ public abstract class Casilla extends Entidad{
         this.id = id;
     }
     
-    public  void efecto(){
+    public  void efecto(Jugador jugadorEnTurno){
         
     }
     

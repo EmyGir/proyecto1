@@ -15,7 +15,7 @@ import java.awt.event.MouseEvent;
 import java.awt.Cursor;
 import java.awt.FlowLayout;
 import javax.swing.JDialog;
-import javax.swing.WindowConstants;
+
 
 
 /**
@@ -107,31 +107,34 @@ public class RegistroJugador extends JFrame {
 private Image elegirFicha(boolean esJugador1) {
     final Image[] fichaSeleccionada = {null};
 
-    // Crear diálogo modal para elegir ficha
+  
     JDialog dialog = new JDialog(this, "Selecciona tu ficha", true);
     dialog.setSize(350, 200);
     dialog.setLocationRelativeTo(this);
     dialog.setLayout(new FlowLayout());
 
-    // Cargar imágenes y escalarlas
+    
     ImageIcon icono1 = new ImageIcon(getClass().getResource("/Assets/Cuadrado.png"));
     ImageIcon icono2 = new ImageIcon(getClass().getResource("/Assets/Circulo.png"));
     Image imagen1 = icono1.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
     Image imagen2 = icono2.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
 
-    // Labels para mostrar imágenes
+    
     JLabel labelFicha1 = new JLabel(new ImageIcon(imagen1));
     JLabel labelFicha2 = new JLabel(new ImageIcon(imagen2));
 
     labelFicha1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     labelFicha2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-    // Mouse listeners para seleccionar ficha
+  
+   
+    final Image[] fichaJugador = {null};
+
     labelFicha1.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
-            if (fichaJugador1 == null || fichaJugador1 .equals(fichaJugador2)) {
-                javax.swing.JOptionPane.showMessageDialog(dialog, "Esa ficha ya fue seleccionada por el Jugador 1.");
+            if (fichaJugador1 != null && fichaJugador1.equals(imagen1)) {
+                JOptionPane.showMessageDialog(dialog, "Esa ficha ya fue seleccionada por el Jugador 1.");
                 return;
             }
             fichaSeleccionada[0] = imagen1;
@@ -142,8 +145,8 @@ private Image elegirFicha(boolean esJugador1) {
     labelFicha2.addMouseListener(new MouseAdapter() {
         @Override
         public void mouseClicked(MouseEvent e) {
-            if (fichaJugador2 == null ||fichaJugador2 .equals(fichaJugador1)) {
-                javax.swing.JOptionPane.showMessageDialog(dialog, "Esa ficha ya fue seleccionada por el Jugador 1.");
+            if (fichaJugador2 != null && fichaJugador2.equals(imagen2)) {
+                JOptionPane.showMessageDialog(dialog, "Esa ficha ya fue seleccionada por el Jugador 1.");
                 return;
             }
             fichaSeleccionada[0] = imagen2;
@@ -153,25 +156,13 @@ private Image elegirFicha(boolean esJugador1) {
 
     dialog.add(labelFicha1);
     dialog.add(labelFicha2);
-
-    dialog.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-    dialog.setVisible(true); // Esto es modal, espera hasta que se cierre
+    dialog.setVisible(true);
 
     return fichaSeleccionada[0];
+
+
+
+
 }
-
- /*
-
- while (fichaJugador2 == null ||fichaJugador2 .equals(fichaJugador1)) {
-    if (fichaJugador2 != null && fichaJugador2.equals(fichaJugador1)) {
-        JOptionPane.showMessageDialog(this, "Esa ficha ya fue seleccionada por el Jugador 1. Elige otra.");
-    }
- }
-
-
-*/
-
-
-
  
 }//class

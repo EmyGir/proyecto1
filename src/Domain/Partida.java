@@ -12,16 +12,26 @@ import java.util.Random;
  * @author emily
  */
 public class Partida {
-   private Tablero tablero= new Tablero();
+    private Tablero tablero;
     private Jugador[] jugadores;
-    private Dado dado= new Dado(200, 500);
-     
+    private Dado dado;
+    private Mazo mazo; 
     
 
     public Partida(Jugador[] jugadores) {
         this.jugadores = jugadores;
         this.tablero=new Tablero();
+       this.dado= new Dado(200, 500);
+       this.mazo= new Mazo(500, 50);
       
+    }
+
+    public Mazo getMazo() {
+        return mazo;
+    }
+
+    public void setMazo(Mazo mazo) {
+        this.mazo = mazo;
     }
 
     public Jugador[] getJugadores() {
@@ -104,6 +114,35 @@ public class Partida {
         this.tablero = tablero;
     }
 
-   
+   public void validarCasilla(){
+       Jugador jugadorEnTurno=null;
+       Jugador jugadorSinTurno=null;
+       
+       for (int i = 0; i < this.jugadores.length; i++) {
+           if(jugadores[i].isTurno())
+               jugadorEnTurno=jugadores[i];
+           else 
+               jugadorSinTurno=jugadores[i];
+       }
+       
+       
+       for (int i = 0; i < this.tablero.getCasillas().length; i++) {
+           for (int j = 0; j < this.tablero.getCasillas()[i].length; j++) {
+           if(jugadorEnTurno.getPaso()==this.tablero.getCasillas()[i][j].getId()){
+               
+               if (this.tablero.getCasillas()[i][j] instanceof DePaso) {
+                    ((DePaso) this.tablero.getCasillas()[i][j]).efecto(jugadorEnTurno, this.dado.getResultadoFinal());
+                    // O efectoY si corresponde
+               }else if (this.tablero.getCasillas()[i][j] instanceof PortalJurasico) {
+                   
+                        ((PortalJurasico) this.tablero.getCasillas()[i][j]).efecto(jugadorEnTurno, jugadorSinTurno);
+                    // O efectoY si corresponde
+               }else 
+                this.tablero.getCasillas()[i][j].efecto(jugadorEnTurno);
+           }
+             
+           }//forj
+       }//fori
+   }//validar casilla
     
 }//clase
