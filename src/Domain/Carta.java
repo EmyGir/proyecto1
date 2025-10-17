@@ -22,5 +22,5 @@ public abstract class Carta {
     public void setId(int id) {
         this.id = id;
     }
-   public abstract  void efecto();
+   public void efecto(Jugador jugador){}
 }//private

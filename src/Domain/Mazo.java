@@ -14,26 +14,27 @@ import javax.swing.ImageIcon;
  *
  * @author emily
  */
-public class Mazo extends Entidad{
-    private ArrayList<Carta>cartas;
+public class Mazo extends Entidad {
+
+    private ArrayList<Carta> cartas;
     private Image imagen;
 
     public Mazo(int posY, int posX) {
         super(posY, posX);
-        this.cartas=new ArrayList<>();
-        this.imagen=new ImageIcon(Mazo.class.getResource("/Assets/mazo.png")).getImage();
+        this.cartas = new ArrayList<>();
+        this.imagen = new ImageIcon(Mazo.class.getResource("/Assets/mazo.png")).getImage();
         rellenarCartas();
     }
 
     @Override
     public void dibujar(Graphics g) {
         g.drawImage(this.imagen, posX, posY, null);
-                
+
     }
-    
-    public void rellenarCartas(){
+
+    public void rellenarCartas() {
         for (int i = 0; i < 8; i++) {
-            int resultado = (int) (Math.random() * (3-1+1) + 1);
+            int resultado = (int) (Math.random() * (3 - 1 + 1) + 1);
             switch (resultado) {
                 case 1:
                     this.cartas.add(new Reto(i));
@@ -41,31 +42,32 @@ public class Mazo extends Entidad{
                 case 2:
                     this.cartas.add(new Recompensa(i));
                     break;
-                    
+
                 case 3:
                     this.cartas.add(new Castigo(i));
                     break;
                 default:
                     throw new AssertionError();
             }
-           
+
         }
-             
-        
+
     }//rellenar cartas
-        public Carta escogerCarta(Jugador jugadorEnTurno){
-          if (cartas.isEmpty()) {
+
+    public Carta escogerCarta(Jugador jugadorEnTurno) {
+        if (cartas.isEmpty()) {
             // reponer mazo; usa limpiar=true para barajar desde cero
             rellenarCartas();
         }
-        int idx = (int) (Math.random() * (8-1+1) + 1);
-        Carta carta = cartas.remove(idx);
-       
-        carta.efecto();  
-        return carta;
-    }
+
+        Carta carta = cartas.remove(cartas.size() - 1);
+        System.out.println("Domain.Mazo.escogerCarta()");
+        
+           carta.efecto(jugadorEnTurno);
+            return carta;
+    }//escoger carta
     
-    
+
     public ArrayList<Carta> getCartas() {
         return cartas;
     }
@@ -73,5 +75,5 @@ public class Mazo extends Entidad{
     public void setCartas(ArrayList<Carta> cartas) {
         this.cartas = cartas;
     }
-    
+
 }//clase
