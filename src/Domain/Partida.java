@@ -16,14 +16,54 @@ public class Partida {
     private Jugador[] jugadores;
     private Dado dado;
     private Mazo mazo; 
-    
-    public Partida(Jugador[] jugadores) {
+    private boolean juegoIniciado;
+    private Jugador jugadorEnTurno;
+
+   public Partida(Jugador[] jugadores) {
         this.jugadores = jugadores;
-        this.tablero=new Tablero();
-       this.dado= new Dado(200, 500);
-       this.mazo= new Mazo(500, 50);
-       
-      
+        this.tablero = new Tablero();
+        this.dado = new Dado(200, 500);
+        this.mazo = new Mazo(500, 50);
+        this.juegoIniciado = false;
+        
+        // MOVER la creación del tablero aquí
+        crearTableroPredeterminado(); // ← Esto debe estar en el constructor
+        
+        inicializarPosicionesJugadores();
+        
+        // DEBUG
+        System.out.println("=== INICIALIZACIÓN PARTIDA ===");
+        System.out.println("Jugador 1: " + jugadores[0].getNombre() + ", turno: " + jugadores[0].isTurno());
+        System.out.println("Jugador 2: " + jugadores[1].getNombre() + ", turno: " + jugadores[1].isTurno());
+        System.out.println("Tablero creado con " + tablero.getCasillas().length + "x" + tablero.getCasillas()[0].length + " casillas");
+    }
+
+    private void inicializarPosicionesJugadores() {
+        // Obtener la primera casilla
+        Casilla inicio = obtenerCasillaPorId(0);
+        if (inicio != null) {
+            for (int i = 0; i < jugadores.length; i++) {
+                Jugador jugador = jugadores[i];
+                jugador.setPaso(0);
+                // Posicionar jugadores en lugares ligeramente diferentes
+                jugador.setPosX(inicio.getPosX() + (i * 20)); // Jugador 1: +0, Jugador 2: +20
+                jugador.setPosY(inicio.getPosY() + 5);
+                
+                System.out.println("Posicionado " + jugador.getNombre() + " en (" + 
+                    jugador.getPosX() + "," + jugador.getPosY() + ")");
+            }
+        } else {
+            System.out.println("ERROR: No se encontró la casilla inicial (ID 0)");
+        }
+    }
+
+    // Añadir validación del estado del juego
+    public boolean isJuegoIniciado() {
+        return juegoIniciado;
+    }
+
+    public Jugador getJugadorEnTurno() {
+        return jugadorEnTurno;
     }
 
     public Mazo getMazo() {
@@ -105,7 +145,7 @@ public class Partida {
      } 
 
     public Tablero getTablero() {
-        crearTableroPredeterminado();
+        //crearTableroPredeterminado();
        // crearTableroAleatorio();
        //esto va en registro
         return tablero;
@@ -119,58 +159,63 @@ public class Partida {
    
 
 public void moverJugador(Jugador jugadorEnTurno) {
-    // 1) Valor real del dado (0..5 -> 1..6)
-    int valor = this.dado.getResultadoFinal() + 1;
+        // 1) Valor real del dado (0..5 -> 1..6)
+        int valor = this.dado.getResultadoFinal() + 1;
+        System.out.println("=== MOVIMIENTO ===");
+        System.out.println("Jugador: " + jugadorEnTurno.getNombre());
+        System.out.println("Dado: " + valor);
+        System.out.println("Posición actual: " + jugadorEnTurno.getPaso());
 
-    // 2) Calcular destino y clamplear
-    int maxId = this.tablero.getCasillas().length * this.tablero.getCasillas()[0].length - 1; // 63
-    int destino = jugadorEnTurno.getPaso() + valor;
-    if (destino > maxId) destino = maxId;
-    if (destino < 0) destino = 0;
+        // 2) Calcular destino
+        int maxId = this.tablero.getCasillas().length * this.tablero.getCasillas()[0].length - 1;
+        int destino = jugadorEnTurno.getPaso() + valor;
+        if (destino > maxId) destino = maxId;
+        if (destino < 0) destino = 0;
 
-    // 3) Casilla destino
-    Casilla casilla = obtenerCasillaPorId(destino);
-    if (casilla == null) return;
+        System.out.println("Destino calculado: " + destino);
 
-    // 4) Actualizar estado lógico y posición visual
-    jugadorEnTurno.setPaso(destino);
-    jugadorEnTurno.setPosX(casilla.getPosX());
-    jugadorEnTurno.setPosY(casilla.getPosY());
+        // 3) Casilla destino
+        Casilla casilla = obtenerCasillaPorId(destino);
+        if (casilla == null) {
+            System.out.println("ERROR: Casilla " + destino + " no encontrada!");
+            return;
+        }
+        
+        System.out.println("Casilla destino: " + casilla.getClass().getSimpleName() + " ID: " + casilla.getId());
 
-    // 5) Efecto
-    if (casilla instanceof DePaso) {
-        cambiarTurno(jugadorEnTurno);
-        return;
-    } else if (casilla instanceof PortalJurasico) {
-        Jugador otro = obtenerOtroJugador(jugadorEnTurno);
-        ((PortalJurasico) casilla).efecto(jugadorEnTurno, otro);
+        // 4) Actualizar estado
+        jugadorEnTurno.setPaso(destino);
+        jugadorEnTurno.setPosX(casilla.getPosX());
+        jugadorEnTurno.setPosY(casilla.getPosY());
 
-        // Si el portal cambió el 'paso', reubica la ficha en la nueva casilla:
+        System.out.println("Aplicando efecto de: " + casilla.getClass().getSimpleName());
+
+        // 5) Efecto
+        if (casilla instanceof DePaso) {
+            System.out.println("Casilla de paso - sin efecto especial");
+        } else if (casilla instanceof PortalJurasico) {
+            System.out.println("Activando Portal Jurásico");
+            Jugador otro = obtenerOtroJugador(jugadorEnTurno);
+            int posicionPrevia = jugadorEnTurno.getPaso();
+            ((PortalJurasico) casilla).efecto(jugadorEnTurno, otro);
+            System.out.println("Posición cambiada de " + posicionPrevia + " a " + jugadorEnTurno.getPaso());
+        } else {
+            System.out.println("Activando efecto especial");
+            int posicionPrevia = jugadorEnTurno.getPaso();
+            casilla.efecto(jugadorEnTurno);
+            System.out.println("Posición cambiada de " + posicionPrevia + " a " + jugadorEnTurno.getPaso());
+        }
+
+        // 6) Reubicar por si el efecto modificó la posición
         Casilla casillaNueva = obtenerCasillaPorId(jugadorEnTurno.getPaso());
         if (casillaNueva != null) {
             jugadorEnTurno.setPosX(casillaNueva.getPosX());
             jugadorEnTurno.setPosY(casillaNueva.getPosY());
+            System.out.println("Posición final: " + jugadorEnTurno.getPosX() + "," + jugadorEnTurno.getPosY());
         }
-        cambiarTurno(jugadorEnTurno);
-    } else {
-        // TrampaDeDinosaurio, DeHallazgo, etc.
-        casilla.efecto(jugadorEnTurno);
 
-        // Reubica por si el efecto modificó 'paso'
-        Casilla casillaNueva = obtenerCasillaPorId(jugadorEnTurno.getPaso());
-        if (casillaNueva != null) {
-            jugadorEnTurno.setPosX(casillaNueva.getPosX());
-            jugadorEnTurno.setPosY(casillaNueva.getPosY());
-        }
         cambiarTurno(jugadorEnTurno);
     }
-
-    // 6) Meta (opcional)
-    if (jugadorEnTurno.getPaso() >= maxId) {
-        // victoria...
-    }
-}
-
 
 public void cambiarTurno(Jugador actual) {
     int idx = (this.jugadores[0] == actual) ? 0 : 1;
