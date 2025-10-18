@@ -16,12 +16,9 @@ import java.util.Random;
 public class Tablero {
 
     private Casilla[][] casillas;
-   
-    
 
     public Tablero() {
         this.casillas = new Casilla[8][8];
-        
 
     }
 
@@ -50,19 +47,22 @@ public class Tablero {
         int contador = 0;
 
         while (filaInicio <= filaFin && columnaInicio <= columnaFin) {
-        // ⃣ Recorrer izquierda → derecha (fila superior)
-        
+            // ⃣ Recorrer izquierda → derecha (fila superior)
+
             for (int j = columnaInicio; j <= columnaFin; j++) {
                 if (casillas[filaInicio][j] != null) {
-                    
+
                     casillas[filaInicio][j].dibujar(g, x, y, anchoCasilla, altoCasilla);
-                    
+
+                    casillas[filaInicio][j].setPosX(x);
+                    casillas[filaInicio][j].setPosY(y);
+
                     // Dibujar número
                     g.setColor(Color.BLACK);
                     casillas[filaInicio][j].setId(contador);
                     g.drawString(String.valueOf(contador),
                             x + anchoCasilla / 2 - 5, y + altoCasilla / 2 + 5);
-                            
+
                     contador++;
                 }
                 x += anchoCasilla; // Mover a la derecha
@@ -76,10 +76,13 @@ public class Tablero {
             for (int i = filaInicio; i <= filaFin; i++) {
                 if (casillas[i][columnaFin] != null) {
                     casillas[i][columnaFin].dibujar(g, x, y, anchoCasilla, altoCasilla);
+                    casillas[i][columnaFin].setPosX(x);
+                    casillas[i][columnaFin].setPosY(y);
+
                     // Dibujar número
                     g.setColor(Color.BLACK);
                     casillas[i][columnaFin].setId(contador);
-                    
+
                     g.drawString(String.valueOf(contador),
                             x + anchoCasilla / 2 - 5, y + altoCasilla / 2 + 5);
                 }
@@ -95,10 +98,13 @@ public class Tablero {
                 for (int j = columnaFin; j >= columnaInicio; j--) {
                     if (casillas[filaFin][j] != null) {
                         casillas[filaFin][j].dibujar(g, x, y, anchoCasilla, altoCasilla);
+                        casillas[filaInicio][j].setPosX(x);
+                        casillas[filaInicio][j].setPosY(y);
+
                         // Dibujar número
                         g.setColor(Color.BLACK);
                         casillas[filaFin][j].setId(contador);
-                         g.drawString(String.valueOf(contador),
+                        g.drawString(String.valueOf(contador),
                                 x + anchoCasilla / 2 - 5, y + altoCasilla / 2 + 5);
                         contador++;
                     }
@@ -116,6 +122,9 @@ public class Tablero {
                 for (int i = filaFin; i >= filaInicio; i--) {
                     if (casillas[i][columnaInicio] != null) {
                         casillas[i][columnaInicio].dibujar(g, x, y, anchoCasilla, altoCasilla);
+                        casillas[i][columnaInicio].setPosX(x);
+                        casillas[i][columnaInicio].setPosY(y);
+
                         // Dibujar número
                         g.setColor(Color.BLACK);
                         casillas[i][columnaInicio].setId(contador);
@@ -133,7 +142,7 @@ public class Tablero {
             }
 
         }
-    
+
     }//dibujar
 
 }//clase

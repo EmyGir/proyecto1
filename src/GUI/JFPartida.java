@@ -5,6 +5,7 @@
 package GUI;
 
 import Domain.Jugador;
+import java.io.IOException;
 import javax.swing.JFrame;
 
 /**
@@ -13,7 +14,7 @@ import javax.swing.JFrame;
  */
 public class JFPartida extends JFrame{
 private Jugador[] jugadores;
-    public JFPartida(Jugador[] jugadors ) {
+    public JFPartida(Jugador[] jugadors ) throws IOException {
        this.jugadores=jugadors;
                
     

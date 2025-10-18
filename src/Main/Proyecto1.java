@@ -8,6 +8,7 @@ import Domain.Jugador;
 import GUI.JFPartida;
 import GUI.JFRegistro;
 import GUI.RegistroJugador;
+import java.io.IOException;
 
 
 /**
@@ -20,7 +21,7 @@ public class Proyecto1 {
      * @param args the command line arguments
      */
    
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
          /* Jugador[] jugadores = new Jugador[2];
           jugadores[0]= new Jugador("prueba1", true, null, 0);
           jugadores[1]= new Jugador("prueba2", true, null, 0);

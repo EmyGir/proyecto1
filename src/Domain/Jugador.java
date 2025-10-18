@@ -6,6 +6,7 @@ package Domain;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -16,13 +17,23 @@ public class Jugador extends Entidad{
     private boolean turno;
     private Image ficha;
     private int paso;
+    private String ruta;
 
-    public Jugador(String nombre, boolean turno, Image ficha, int paso) {
-        super(0, 0);
+    public Jugador(String nombre, boolean turno, Image ficha, int paso, String ruta) {
+        super(50, 50);
         this.nombre = nombre;
         this.turno = turno;
         this.ficha = ficha;
         this.paso = paso;
+        this.ruta=ruta;
+    }
+
+    public String getRuta() {
+        return ruta;
+    }
+
+    public void setRuta(String ruta) {
+        this.ruta = ruta;
     }
 
   
@@ -66,7 +77,8 @@ public class Jugador extends Entidad{
 
     @Override
     public void dibujar(Graphics g) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+       this.ficha =new ImageIcon(Dado.class.getResource(this.ruta)).getImage(); 
+       g.drawImage(this.ficha, posX, posY, null);
     }
     
  

@@ -14,6 +14,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -28,13 +31,17 @@ public class JPPartida extends JPanel implements ActionListener {
     private JButton jbDado;
     private JButton jbMazo;
     private Partida partida;
+    private int contador=0;
+    private int[]lanzamientos= new int[2];
 
-    public JPPartida(Jugador[] jugadors) {
+    public JPPartida(Jugador[] jugadors) throws IOException {
+        this.lanzamientos[0]=0;
+        this.lanzamientos[1]=0;
         setPreferredSize(new Dimension(700, 800));
         setBackground(Color.BLACK);
         setFocusable(true);
-
         setLayout(null);
+        
         //inicializar partida
         this.partida = new Partida(jugadors);
         //botones
@@ -59,7 +66,7 @@ public class JPPartida extends JPanel implements ActionListener {
             }
         });
 
-    }
+    }//constructor
 
     private void actualizarAnimacion() {
         // Actualizar movimiento del dado
@@ -81,28 +88,42 @@ public class JPPartida extends JPanel implements ActionListener {
         super.paintComponent(g);
         this.partida.getDado().dibujar(g);
         this.partida.getTablero().dibujar(g);
-        this.partida.getDado().dibujar(g);
+        
         this.partida.getMazo().dibujar(g);
+        for (int i = 0; i < this.partida.getJugadores().length; i++) {
+            this.partida.getJugadores()[i].dibujar(g);
+        }
+        
 
     }//dibujar
+  
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-      if (e.getSource() == this.jbDado) {
-        this.partida.getDado().lanzar();
-        this.timer.start(); // ← solo una vez
+
+ @Override
+public void actionPerformed(ActionEvent e) {
+    if (e.getSource() == this.jbDado) {
+        int cara = this.partida.getDado().lanzar(); // 0..5
+        this.timer.start();
         repaint();
+
+        if (contador < 2) {
+            // fase de sorteo
+            definirTurnos(cara);
+        } else {
+            // fase de juego normal
+            Jugador jugadorEnTurno = obtenerJugadorEnTurno();
+            if (jugadorEnTurno == null) {
+                javax.swing.JOptionPane.showMessageDialog(this, "No hay jugador en turno.");
+                return;
+            }
+            this.partida.moverJugador(jugadorEnTurno);
+        }
+        contador++;
         return;
     }
 
     if (e.getSource() == this.jbMazo) {
-        Jugador jugadorEnTurno = null;
-        for (Jugador j : this.partida.getJugadores()) {
-            if (j.isTurno()) {
-                jugadorEnTurno = j;
-                break; // ← importantísimo
-            }
-        }
+        Jugador jugadorEnTurno = obtenerJugadorEnTurno();
         if (jugadorEnTurno == null) {
             javax.swing.JOptionPane.showMessageDialog(this, "No hay jugador en turno.");
             return;
@@ -110,7 +131,39 @@ public class JPPartida extends JPanel implements ActionListener {
         this.partida.getMazo().escogerCarta(jugadorEnTurno);
         repaint();
     }
+}
 
-    }//actionPerformed
+private Jugador obtenerJugadorEnTurno() {
+    for (Jugador j : this.partida.getJugadores()) {
+        if (j.isTurno()) return j;
+    }
+    return null;
+}
+
+public void definirTurnos(int caraDado0a5) {
+    int valor = caraDado0a5 + 1; // 1..6
+    if (contador == 0) {
+        lanzamientos[0] = valor;
+        javax.swing.JOptionPane.showMessageDialog(this, "Jugador 1 sacó " + valor + ". Ahora lanza el Jugador 2.");
+    } else if (contador == 1) {
+        lanzamientos[1] = valor;
+        // Resolver
+        if (lanzamientos[0] == lanzamientos[1]) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Empate " + valor + " vs " + valor + ". Vuelven a lanzar.");
+            lanzamientos[0] = 0;
+            lanzamientos[1] = 0;
+            contador = -1; // para que en el ++ del handler vuelva a 0
+            // No setees turnos todavía
+        } else if (lanzamientos[0] > lanzamientos[1]) {
+            this.partida.getJugadores()[0].setTurno(true);
+            this.partida.getJugadores()[1].setTurno(false);
+            javax.swing.JOptionPane.showMessageDialog(this, "Empieza " + this.partida.getJugadores()[0].getNombre());
+        } else {
+            this.partida.getJugadores()[0].setTurno(false);
+            this.partida.getJugadores()[1].setTurno(true);
+            javax.swing.JOptionPane.showMessageDialog(this, "Empieza " + this.partida.getJugadores()[1].getNombre());
+        }
+    }
+}
 
 }//clase

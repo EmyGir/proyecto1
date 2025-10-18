@@ -14,6 +14,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Cursor;
 import java.awt.FlowLayout;
+import java.io.IOException;
 import javax.swing.JDialog;
 
 
@@ -29,23 +30,25 @@ public class RegistroJugador extends JFrame {
     private Jugador jugador2;
     private Image fichaJugador1;
     private Image fichaJugador2;
+    private String ruta="";
 
-    public RegistroJugador() {
-        setTitle("Registro de Jugadores");
-        setSize(700, 700);  
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setLayout(null);
-
+    public RegistroJugador() throws IOException {
+//        setTitle("Registro de Jugadores");
+//        setSize(500, 500);  
+//        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//        setLocationRelativeTo(null);
+//        setLayout(null);
+          
         inicializarComponentes();
     }
 
-    private void inicializarComponentes() {
+    private void inicializarComponentes() throws IOException {
         registrarJugadores();
+       
     }
 
 
-    private void registrarJugadores() {
+    private void registrarJugadores() throws IOException {
         String nombreJugador1 = JOptionPane.showInputDialog(this, "Ingrese el nombre del Jugador 1:");
 
         if (nombreJugador1 == null || nombreJugador1.trim().isEmpty()) {
@@ -54,7 +57,7 @@ public class RegistroJugador extends JFrame {
         }
 
 
-        jugador1 = new Jugador(nombreJugador1, true, null, 0);
+        jugador1 = new Jugador(nombreJugador1, true, null, 0,this.ruta);
         
         fichaJugador1 = elegirFicha(true);
 
@@ -82,7 +85,7 @@ public class RegistroJugador extends JFrame {
        
 
 
-        jugador2 = new Jugador(nombreJugador2, false, null, 0);
+        jugador2 = new Jugador(nombreJugador2, false, null, 0,this.ruta);
 
 
         fichaJugador2 = elegirFicha(false);
@@ -96,17 +99,18 @@ public class RegistroJugador extends JFrame {
         
 
         jugador2.setFicha(fichaJugador2);
-
+        
 
         JOptionPane.showMessageDialog(this, "Los jugadores han sido registrados correctamente \n" +
                 "Jugador 1: " + jugador1.getNombre() + "\n" +
                 "Jugador 2: " + jugador2.getNombre());
-    }
+         mandarJugadoresVentana();
+    }//registrar jugador
 
     
 private Image elegirFicha(boolean esJugador1) {
     final Image[] fichaSeleccionada = {null};
-
+    
   
     JDialog dialog = new JDialog(this, "Selecciona tu ficha", true);
     dialog.setSize(350, 200);
@@ -131,9 +135,9 @@ private Image elegirFicha(boolean esJugador1) {
     final Image[] fichaJugador = {null};
 
     labelFicha1.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            if (fichaJugador1 != null && fichaJugador1.equals(imagen1)) {
+        @Override public void mouseClicked(MouseEvent e) {
+            // Si es jugador 2, no puede elegir lo que ya eligió jugador 1
+            if (!esJugador1 && fichaJugador1 != null && fichaJugador1.equals(imagen1)) {
                 JOptionPane.showMessageDialog(dialog, "Esa ficha ya fue seleccionada por el Jugador 1.");
                 return;
             }
@@ -143,9 +147,8 @@ private Image elegirFicha(boolean esJugador1) {
     });
 
     labelFicha2.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            if (fichaJugador2 != null && fichaJugador2.equals(imagen2)) {
+        @Override public void mouseClicked(MouseEvent e) {
+            if (!esJugador1 && fichaJugador1 != null && fichaJugador1.equals(imagen2)) {
                 JOptionPane.showMessageDialog(dialog, "Esa ficha ya fue seleccionada por el Jugador 1.");
                 return;
             }
@@ -157,12 +160,24 @@ private Image elegirFicha(boolean esJugador1) {
     dialog.add(labelFicha1);
     dialog.add(labelFicha2);
     dialog.setVisible(true);
-
+      if(fichaSeleccionada[0]==imagen1){
+          this.ruta="/Assets/Cuadrado.png";
+      }else
+          this.ruta="/Assets/Circulo.png";
     return fichaSeleccionada[0];
 
 
 
 
-}
+}//elegir ficha
+
+ private void mandarJugadoresVentana() throws IOException{
+     Jugador[] jugadors = new Jugador[2];
+     jugadors[0]=this.jugador1;
+     jugadors[1]=this.jugador2;
+     JFPartida fPartida= new JFPartida(jugadors);
+     
+     
+ }//
  
 }//class
