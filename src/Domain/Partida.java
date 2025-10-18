@@ -18,16 +18,15 @@ public class Partida {
     private Mazo mazo; 
     private boolean juegoIniciado;
     private Jugador jugadorEnTurno;
-
-   public Partida(Jugador[] jugadores) {
+    public Partida(Jugador[] jugadores) {
         this.jugadores = jugadores;
         this.tablero = new Tablero();
         this.dado = new Dado(200, 500);
         this.mazo = new Mazo(500, 50);
         this.juegoIniciado = false;
         
-        // MOVER la creación del tablero aquí
-        crearTableroPredeterminado(); // ← Esto debe estar en el constructor
+        // MOVER la creación del tablero aquí - ES CRÍTICO
+        crearTableroPredeterminado();
         
         inicializarPosicionesJugadores();
         
@@ -37,8 +36,7 @@ public class Partida {
         System.out.println("Jugador 2: " + jugadores[1].getNombre() + ", turno: " + jugadores[1].isTurno());
         System.out.println("Tablero creado con " + tablero.getCasillas().length + "x" + tablero.getCasillas()[0].length + " casillas");
     }
-
-    private void inicializarPosicionesJugadores() {
+ private void inicializarPosicionesJugadores() {
         // Obtener la primera casilla
         Casilla inicio = obtenerCasillaPorId(0);
         if (inicio != null) {
@@ -56,6 +54,7 @@ public class Partida {
             System.out.println("ERROR: No se encontró la casilla inicial (ID 0)");
         }
     }
+
 
     // Añadir validación del estado del juego
     public boolean isJuegoIniciado() {
@@ -145,9 +144,7 @@ public class Partida {
      } 
 
     public Tablero getTablero() {
-        //crearTableroPredeterminado();
-       // crearTableroAleatorio();
-       //esto va en registro
+ 
         return tablero;
     }
 
@@ -158,7 +155,7 @@ public class Partida {
 
    
 
-public void moverJugador(Jugador jugadorEnTurno) {
+    public void moverJugador(Jugador jugadorEnTurno) {
         // 1) Valor real del dado (0..5 -> 1..6)
         int valor = this.dado.getResultadoFinal() + 1;
         System.out.println("=== MOVIMIENTO ===");
@@ -217,32 +214,45 @@ public void moverJugador(Jugador jugadorEnTurno) {
         cambiarTurno(jugadorEnTurno);
     }
 
-public void cambiarTurno(Jugador actual) {
-    int idx = (this.jugadores[0] == actual) ? 0 : 1;
-    int next = 1 - idx;
-    this.jugadores[idx].setTurno(false);
-    this.jugadores[next].setTurno(true);
-}
-
-
-
-// Helpers
-private Casilla obtenerCasillaPorId(int idBuscado) {
-    for (int i = 0; i < this.tablero.getCasillas().length; i++) {
-        for (int j = 0; j < this.tablero.getCasillas()[i].length; j++) {
-            Casilla c = this.tablero.getCasillas()[i][j];
-            if (c != null && c.getId() == idBuscado) {
-                return c;
+    public void cambiarTurno(Jugador actual) {
+        int idx = -1;
+        for (int i = 0; i < this.jugadores.length; i++) {
+            if (this.jugadores[i] == actual) {
+                idx = i;
+                break;
             }
         }
+        
+        if (idx != -1) {
+            int next = (idx + 1) % this.jugadores.length;
+            this.jugadores[idx].setTurno(false);
+            this.jugadores[next].setTurno(true);
+            this.jugadorEnTurno = this.jugadores[next];
+            
+            System.out.println("Turno cambiado a: " + this.jugadorEnTurno.getNombre());
+        }
     }
-    return null;
-}
 
-private Jugador obtenerOtroJugador(Jugador actual) {
-    for (Jugador j : this.jugadores) if (j != actual) return j;
-    return actual; // defensa si solo hay uno
-}
+
+
+
+
+    private Casilla obtenerCasillaPorId(int idBuscado) {
+        for (int i = 0; i < this.tablero.getCasillas().length; i++) {
+            for (int j = 0; j < this.tablero.getCasillas()[i].length; j++) {
+                Casilla c = this.tablero.getCasillas()[i][j];
+                if (c != null && c.getId() == idBuscado) {
+                    return c;
+                }
+            }
+        }
+        return null;
+    }
+
+    private Jugador obtenerOtroJugador(Jugador actual) {
+        for (Jugador j : this.jugadores) if (j != actual) return j;
+        return actual; // defensa si solo hay uno
+    }//obtener jugadores
 
 
     

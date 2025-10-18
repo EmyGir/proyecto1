@@ -85,15 +85,27 @@ public class JPPartida extends JPanel implements ActionListener {
 
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        this.partida.getDado().dibujar(g);
-        this.partida.getTablero().dibujar(g);
+       
+    super.paintComponent(g);
+    
+    // Dibujar elementos en orden
+    this.partida.getTablero().dibujar(g);
+    this.partida.getDado().dibujar(g);
+    this.partida.getMazo().dibujar(g);
+    
+    // DEBUG: información de jugadores
+    g.setColor(Color.WHITE);
+    g.drawString("Estado del juego:", 500, 50);
+    
+    for (int i = 0; i < this.partida.getJugadores().length; i++) {
+        Jugador jugador = this.partida.getJugadores()[i];
         
-        this.partida.getMazo().dibujar(g);
-        for (int i = 0; i < this.partida.getJugadores().length; i++) {
-            this.partida.getJugadores()[i].dibujar(g);
-        }
+        // Dibujar jugador
+        jugador.dibujar(g);
         
+
+   }
+
 
     }//dibujar
   
@@ -117,6 +129,7 @@ public void actionPerformed(ActionEvent e) {
                 return;
             }
             this.partida.moverJugador(jugadorEnTurno);
+            repaint();
         }
         contador++;
         return;
