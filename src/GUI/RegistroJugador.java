@@ -6,16 +6,18 @@ package GUI;
 
 import Domain.Jugador;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.Cursor;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
 import java.io.IOException;
 import javax.swing.JDialog;
+import javax.swing.JPanel;
 
 
 
@@ -100,8 +102,8 @@ public class RegistroJugador extends JFrame {
     
 private Image elegirFicha(boolean esJugador1) {
     final Image[] fichaSeleccionada = {null};
-    final String[] rutaSeleccionada = {""}; // ← AÑADIR ESTO
-    
+    final String[] rutaSeleccionada = {""};
+
     JDialog dialog = new JDialog(this, "Selecciona tu ficha", true);
     dialog.setSize(350, 200);
     dialog.setLocationRelativeTo(this);
@@ -112,55 +114,74 @@ private Image elegirFicha(boolean esJugador1) {
     Image imagen1 = icono1.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
     Image imagen2 = icono2.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
 
-    JLabel labelFicha1 = new JLabel(new ImageIcon(imagen1));
-    JLabel labelFicha2 = new JLabel(new ImageIcon(imagen2));
+    // Panel personalizado para Cuadrado
+    JPanel panelFicha1 = new JPanel() {
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(imagen1, 0, 0, getWidth(), getHeight(), this);
+        }
+    };
+    panelFicha1.setPreferredSize(new Dimension(120, 120));
+    panelFicha1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-    labelFicha1.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-    labelFicha2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    // Panel personalizado para Círculo
+    JPanel panelFicha2 = new JPanel() {
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(imagen2, 0, 0, getWidth(), getHeight(), this);
+        }
+    };
+    panelFicha2.setPreferredSize(new Dimension(120, 120));
+    panelFicha2.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
-    labelFicha1.addMouseListener(new MouseAdapter() {
-        @Override public void mouseClicked(MouseEvent e) {
+    // Listeners
+    panelFicha1.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
             if (!esJugador1 && fichaJugador1 != null && fichaJugador1.equals(imagen1)) {
                 JOptionPane.showMessageDialog(dialog, "Esa ficha ya fue seleccionada por el Jugador 1.");
                 return;
             }
             fichaSeleccionada[0] = imagen1;
-            rutaSeleccionada[0] = "/Assets/Cuadrado.png"; // ← AÑADIR
+            rutaSeleccionada[0] = "/Assets/Cuadrado.png";
             dialog.dispose();
         }
     });
 
-    labelFicha2.addMouseListener(new MouseAdapter() {
-        @Override public void mouseClicked(MouseEvent e) {
+    panelFicha2.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
             if (!esJugador1 && fichaJugador1 != null && fichaJugador1.equals(imagen2)) {
                 JOptionPane.showMessageDialog(dialog, "Esa ficha ya fue seleccionada por el Jugador 1.");
                 return;
             }
             fichaSeleccionada[0] = imagen2;
-            rutaSeleccionada[0] = "/Assets/Circulo.png"; // ← AÑADIR
+            rutaSeleccionada[0] = "/Assets/Circulo.png";
             dialog.dispose();
         }
     });
 
-    dialog.add(labelFicha1);
-    dialog.add(labelFicha2);
+    dialog.add(panelFicha1);
+    dialog.add(panelFicha2);
     dialog.setVisible(true);
-    
-    // Asignar la ruta correcta al jugador correspondiente
+
     if (esJugador1) {
         this.jugador1.setRuta(rutaSeleccionada[0]);
     } else {
         this.jugador2.setRuta(rutaSeleccionada[0]);
     }
-    
+
     return fichaSeleccionada[0];
 }
+
 
  private void mandarJugadoresVentana() throws IOException{
      Jugador[] jugadors = new Jugador[2];
      jugadors[0]=this.jugador1;
      jugadors[1]=this.jugador2;
-     JFPartida fPartida= new JFPartida(jugadors);
+     JFPartida Partida= new JFPartida(jugadors);
      
      
  }//
