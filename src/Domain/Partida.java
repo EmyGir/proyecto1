@@ -19,12 +19,14 @@ public class Partida {
     private boolean juegoIniciado;
     private Jugador jugadorEnTurno;
      private DeHallazgo casillaHallazgoActiva; 
+      private boolean esperandoAccionHallazgo; 
     public Partida(Jugador[] jugadores) {
         this.jugadores = jugadores;
         this.tablero = new Tablero();
         this.dado = new Dado(200, 500);
         this.mazo = new Mazo(500, 50);
         this.juegoIniciado = false;
+         this.esperandoAccionHallazgo = false;
         
         // MOVER la creación del tablero aquí - ES CRÍTICO
         crearTableroPredeterminado();
@@ -90,60 +92,72 @@ public class Partida {
         this.dado = dado;
     }
     
-     public void crearTableroPredeterminado(){
-          for (int i = 0; i < this.tablero.getCasillas().length; i++) {
-            for (int j = 0; j < this.tablero.getCasillas()[i].length; j++) {
-                
-                if(((i==2&& j==5) || (i==7&& j==0) || (i==1&& j==8) || (i==5&& j==3) || (i==0&& j==6) || 
-                        (i==5&& j==2) || (i==8&& j==1) || (i==3&& j==7) || (i==6&& j==4) || (i==2&& j==0) || 
-                        (i==7&& j==3) || (i==1&& j==5) || (i==4&& j==8) || (i==0&& j==2)))
-                 this.tablero.getCasillas()[i][j]= new TrampaDeDinosaurio(i, j, j);//rojo
-              
-                
-                else if(((i==5&& j==7) || (i==8&& j==4) || (i==3&& j==1) || (i==6&& j==0) || (i==2&& j==3) || 
-                        (i==7&& j==6) || (i==1&& j==2) || (i==4&& j==5) || (i==0&& j==8) || (i==5&& j==1) || 
-                        (i==8&& j==7) || (i==3&& j==4) || (i==6&& j==2) || (i==2&& j==6)))
-                 this.tablero.getCasillas()[i][j]= new DeHallazgo(i, j, j,this.getMazo());//amarillo
-                
-                else if((i==7&& j==1) || (i==1&& j==4) || (i==4&& j==0) || (i==0&& j==3) || (i==3&& j==6) || 
-                        (i==6&& j==8) || (i==8&& j==5) || (i==5&& j==7) || (i==7&& j==2) || (i==2&& j==4) || 
-                        (i==4&& j==1) || (i==1&& j==7) || (i==8&& j==3) || (i==3&& j==0))
-                 this.tablero.getCasillas()[i][j]= new PortalJurasico(i, j, j);//naranja
-                
-                else
-                 this.tablero.getCasillas()[i][j]= new DePaso(i, j, j);//verde
+    public void crearTableroPredeterminado(){
+    System.out.println("=== CREANDO TABLERO PREDETERMINADO ===");
+    int totalCasillas = 0;
+    
+    for (int i = 0; i < this.tablero.getCasillas().length; i++) {
+        for (int j = 0; j < this.tablero.getCasillas()[i].length; j++) {
+            // CORREGIR: Calcular ID único para cada casilla
+            int id = i * this.tablero.getCasillas()[i].length + j;
+            
+            if(((i==2&& j==5) || (i==7&& j==0) || (i==1&& j==8) || (i==5&& j==3) || (i==0&& j==6) || 
+                    (i==5&& j==2) || (i==8&& j==1) || (i==3&& j==7) || (i==6&& j==4) || (i==2&& j==0) || 
+                    (i==7&& j==3) || (i==1&& j==5) || (i==4&& j==8) || (i==0&& j==2))) {
+                this.tablero.getCasillas()[i][j] = new TrampaDeDinosaurio(id, i, j);
+                System.out.println("Trampa en: " + i + "," + j + " ID: " + id);
+            } else if(((i==5&& j==7) || (i==8&& j==4) || (i==3&& j==1) || (i==6&& j==0) || (i==2&& j==3) || 
+                    (i==7&& j==6) || (i==1&& j==2) || (i==4&& j==5) || (i==0&& j==8) || (i==5&& j==1) || 
+                    (i==8&& j==7) || (i==3&& j==4) || (i==6&& j==2) || (i==2&& j==6))) {
+                this.tablero.getCasillas()[i][j] = new DeHallazgo(id, i, j, this.getMazo());
+                System.out.println("Hallazgo en: " + i + "," + j + " ID: " + id);
+            } else if((i==7&& j==1) || (i==1&& j==4) || (i==4&& j==0) || (i==0&& j==3) || (i==3&& j==6) || 
+                    (i==6&& j==8) || (i==8&& j==5) || (i==5&& j==7) || (i==7&& j==2) || (i==2&& j==4) || 
+                    (i==4&& j==1) || (i==1&& j==7) || (i==8&& j==3) || (i==3&& j==0)) {
+                this.tablero.getCasillas()[i][j] = new PortalJurasico(id, i, j);
+                System.out.println("Portal en: " + i + "," + j + " ID: " + id);
+            } else {
+                this.tablero.getCasillas()[i][j] = new DePaso(id, i, j);
             }
+            totalCasillas++;
         }
-         setTablero(this.tablero);
-     } 
+    }
+    System.out.println("Total casillas creadas: " + totalCasillas);
+    setTablero(this.tablero);
+}//crear tablero predeterminado
      
-     public void crearTableroAleatorio(){
-      
-          for (int i = 0; i < this.tablero.getCasillas().length; i++) {
-            for (int j = 0; j < this.tablero.getCasillas()[i].length; j++) {
-                  int resultado = (int) (Math.random() * (4-1+1) + 1);
-                
-                switch (resultado) {
-                    case 2:
-                        this.tablero.getCasillas()[i][j]= new TrampaDeDinosaurio(i, j, j);//rojo
-                        break;
-                    case 4:
-                        this.tablero.getCasillas()[i][j]= new DeHallazgo(i, j, j,this.getMazo());//amarillo
-                        break;
-                    case 3:
-                        this.tablero.getCasillas()[i][j]= new PortalJurasico(i, j, j);//naranja
-                        break;
-                    case 1:
-                        this.tablero.getCasillas()[i][j]= new DePaso(i, j, j);//verde
-                        break;
-                    default:
-                        break;
-                }
+public void crearTableroAleatorio(){
+    System.out.println("=== CREANDO TABLERO ALEATORIO ===");
+    int totalCasillas = 0;
+    
+    for (int i = 0; i < this.tablero.getCasillas().length; i++) {
+        for (int j = 0; j < this.tablero.getCasillas()[i].length; j++) {
+            // CORREGIR: Calcular ID único
+            int id = i * this.tablero.getCasillas()[i].length + j;
+            int resultado = (int) (Math.random() * (4-1+1) + 1);
+            
+            switch (resultado) {
+                case 2:
+                    this.tablero.getCasillas()[i][j] = new TrampaDeDinosaurio(id, i, j);
+                    break;
+                case 4:
+                    this.tablero.getCasillas()[i][j] = new DeHallazgo(id, i, j, this.getMazo());
+                    break;
+                case 3:
+                    this.tablero.getCasillas()[i][j] = new PortalJurasico(id, i, j);
+                    break;
+                case 1:
+                    this.tablero.getCasillas()[i][j] = new DePaso(id, i, j);
+                    break;
+                default:
+                    break;
             }
+            totalCasillas++;
         }
-          setTablero(this.tablero);
-     } 
-
+    }
+    System.out.println("Total casillas creadas: " + totalCasillas);
+    setTablero(this.tablero);
+}//crear tablero aleatorio
     public Tablero getTablero() {
  
         return tablero;
@@ -157,86 +171,97 @@ public class Partida {
    
 
    public void moverJugador(Jugador jugadorEnTurno) {
-    // 1) Valor real del dado (0..5 -> 1..6)
-    int valor = this.dado.getResultadoFinal() + 1;
-    System.out.println("=== MOVIMIENTO INICIADO ===");
-    System.out.println("Jugador: " + jugadorEnTurno.getNombre());
-    System.out.println("Dado: " + valor);
-    System.out.println("Posición actual: " + jugadorEnTurno.getPaso());
+        // 1) Valor real del dado (0..5 -> 1..6)
+        int valor = this.dado.getResultadoFinal() + 1;
+        System.out.println("=== MOVIMIENTO INICIADO ===");
+        System.out.println("Jugador: " + jugadorEnTurno.getNombre());
 
-    // 2) Calcular destino
-    int maxId = this.tablero.getCasillas().length * this.tablero.getCasillas()[0].length - 1;
-    int destino = jugadorEnTurno.getPaso() + valor;
-    if (destino > maxId) destino = maxId;
-    if (destino < 0) destino = 0;
+        // 2) Calcular destino
+        int maxId = this.tablero.getCasillas().length * this.tablero.getCasillas()[0].length - 1;
+        int destino = jugadorEnTurno.getPaso() + valor;
+        if (destino > maxId) destino = maxId;
+        if (destino < 0) destino = 0;
 
-    System.out.println("Destino calculado: " + destino);
+        // 3) Casilla destino
+        Casilla casilla = obtenerCasillaPorId(destino);
+        if (casilla == null) {
+            System.out.println("ERROR: Casilla " + destino + " no encontrada!");
+            cambiarTurno(jugadorEnTurno);
+            return;
+        }
 
-    // 3) Casilla destino
-    Casilla casilla = obtenerCasillaPorId(destino);
-    if (casilla == null) {
-        System.out.println("ERROR: Casilla " + destino + " no encontrada!");
-        // Forzar posición válida
-        jugadorEnTurno.setPaso(0);
-        casilla = obtenerCasillaPorId(0);
-    }
-    
-    System.out.println("Casilla destino: " + casilla.getClass().getSimpleName() + " ID: " + casilla.getId());
+        // 4) Actualizar estado
+        jugadorEnTurno.setPaso(destino);
+        jugadorEnTurno.setPosX(casilla.getPosX());
+        jugadorEnTurno.setPosY(casilla.getPosY());
 
-    // 4) Actualizar estado ANTES del efecto
-    jugadorEnTurno.setPaso(destino);
-    jugadorEnTurno.setPosX(casilla.getPosX());
-    jugadorEnTurno.setPosY(casilla.getPosY());
-    
-    System.out.println("Posición después de movimiento: " + jugadorEnTurno.getPaso());
+        System.out.println("Casilla destino: " + casilla.getClass().getSimpleName() + " ID: " + casilla.getId());
 
-    // 5) Aplicar efecto
-    System.out.println("Aplicando efecto de: " + casilla.getClass().getSimpleName());
-    
-    int posicionPrevia = jugadorEnTurno.getPaso();
-    
-    if (casilla instanceof DePaso) {
-        System.out.println("Casilla de paso - sin efecto especial");
-    } else if (casilla instanceof PortalJurasico) {
-        System.out.println("Activando Portal Jurásico");
-        Jugador otro = obtenerOtroJugador(jugadorEnTurno);
-        ((PortalJurasico) casilla).efecto(jugadorEnTurno, otro);
-    } else if (casilla instanceof DeHallazgo) {
-        System.out.println("Activando Casilla de Hallazgo");
-         DeHallazgo hallazgo = (DeHallazgo) casilla;
+        // 5) Efecto
+        if (casilla instanceof DePaso) {
+            System.out.println("Casilla de paso - cambiar turno");
+            cambiarTurno(jugadorEnTurno);
+        } else if (casilla instanceof PortalJurasico) {
+            System.out.println("Activando Portal Jurásico");
+            Jugador otro = obtenerOtroJugador(jugadorEnTurno);
+            ((PortalJurasico) casilla).efecto(jugadorEnTurno, otro);
+            cambiarTurno(jugadorEnTurno);
+        } else if (casilla instanceof TrampaDeDinosaurio) {
+            System.out.println("Activando Trampa de Dinosaurio");
+            casilla.efecto(jugadorEnTurno);
+            cambiarTurno(jugadorEnTurno);
+        } else if (casilla instanceof DeHallazgo) {
+            System.out.println("Activando Casilla de Hallazgo - NO cambiar turno aún");
+            DeHallazgo hallazgo = (DeHallazgo) casilla;
             hallazgo.efecto(jugadorEnTurno);
-            this.casillaHallazgoActiva = hallazgo; // Guardar referencia
-    } else if (casilla instanceof TrampaDeDinosaurio) {
-        System.out.println("Activando Trampa de Dinosaurio");
-        casilla.efecto(jugadorEnTurno);
-    } else {
-        System.out.println("Activando efecto genérico");
-        casilla.efecto(jugadorEnTurno);
+            this.casillaHallazgoActiva = hallazgo;
+            this.esperandoAccionHallazgo = true; // ← NO cambiar turno aquí
+            // IMPORTANTE: NO llamar a cambiarTurno() aquí
+        } else {
+            System.out.println("Activando efecto genérico");
+            casilla.efecto(jugadorEnTurno);
+            cambiarTurno(jugadorEnTurno);
+        }
+
+        // 6) Reubicar posición visual
+        Casilla casillaFinal = obtenerCasillaPorId(jugadorEnTurno.getPaso());
+        if (casillaFinal != null) {
+            jugadorEnTurno.setPosX(casillaFinal.getPosX() + 10);
+            jugadorEnTurno.setPosY(casillaFinal.getPosY() + 10);
+        }
+        
+        System.out.println("=== MOVIMIENTO TERMINADO ===");
     }
 
-    System.out.println("Posición después del efecto: " + jugadorEnTurno.getPaso() + 
-                      " (cambio: " + (jugadorEnTurno.getPaso() - posicionPrevia) + ")");
-
-    // 6) Reubicar SIEMPRE después del efecto
-    Casilla casillaFinal = obtenerCasillaPorId(jugadorEnTurno.getPaso());
-    if (casillaFinal != null) {
-        jugadorEnTurno.setPosX(casillaFinal.getPosX() + 10); // Pequeño offset para visualización
-        jugadorEnTurno.setPosY(casillaFinal.getPosY() + 10);
-        System.out.println("Posición final: " + jugadorEnTurno.getPosX() + "," + jugadorEnTurno.getPosY());
-    } else {
-        System.out.println("ERROR: No se pudo encontrar casilla final ID: " + jugadorEnTurno.getPaso());
-        // Forzar posición válida
-        jugadorEnTurno.setPaso(0);
-        Casilla inicio = obtenerCasillaPorId(0);
-        if (inicio != null) {
-            jugadorEnTurno.setPosX(inicio.getPosX() + 10);
-            jugadorEnTurno.setPosY(inicio.getPosY() + 10);
+    // Nuevo método para completar el turno después de tomar carta
+    public void completarTurnoHallazgo(Jugador jugador) {
+        if (this.esperandoAccionHallazgo) {
+            System.out.println("Completando turno después de hallazgo para: " + jugador.getNombre());
+            this.esperandoAccionHallazgo = false;
+            this.casillaHallazgoActiva = null;
+            cambiarTurno(jugador);
         }
     }
 
-    cambiarTurno(jugadorEnTurno);
-    System.out.println("=== MOVIMIENTO TERMINADO ===\n");
-}//mover jugador
+    public Carta procesarSeleccionCarta(Jugador jugador) {
+        if (casillaHallazgoActiva != null && casillaHallazgoActiva.isEsperandoSeleccion()) {
+            Carta carta = this.mazo.escogerCarta(jugador);
+            casillaHallazgoActiva.setEsperandoSeleccion(false);
+            
+            // Después de tomar la carta, completar el turno
+            completarTurnoHallazgo(jugador);
+            return carta;
+        }
+        return null;
+    }
+
+    public boolean hayCasillaHallazgoActiva() {
+        return casillaHallazgoActiva != null && casillaHallazgoActiva.isEsperandoSeleccion();
+    }
+
+    public boolean isEsperandoAccionHallazgo() {
+        return esperandoAccionHallazgo;
+    }
    
 
     public void cambiarTurno(Jugador actual) {
@@ -291,20 +316,9 @@ public void iniciarJuego() {
     System.out.println("Juego iniciado. Primer turno: " + this.jugadorEnTurno.getNombre());
 }//iniciar juego
 
-public Carta procesarSeleccionCarta(Jugador jugador) {
-        if (casillaHallazgoActiva != null && casillaHallazgoActiva.isEsperandoSeleccion()) {
-            Carta carta = this.mazo.escogerCarta(jugador);
-            casillaHallazgoActiva.setEsperandoSeleccion(false); // Resetear estado
-            casillaHallazgoActiva = null; // Limpiar referencia
-            return carta;
-        }
-        return null;
-    }
+
     
-    // Método para verificar si hay casilla de hallazgo activa
-    public boolean hayCasillaHallazgoActiva() {
-        return casillaHallazgoActiva != null && casillaHallazgoActiva.isEsperandoSeleccion();
-    }
+ 
     
     // Método para obtener el mensaje de la casilla activa
     public String getMensajeCasillaHallazgo() {

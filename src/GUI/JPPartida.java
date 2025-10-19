@@ -109,20 +109,30 @@ public class JPPartida extends JPanel implements ActionListener {
         }
 
         if (e.getSource() == this.jbMazo) {
-            if (faseSorteo) {
-                javax.swing.JOptionPane.showMessageDialog(this,
-                        "Primero deben definir los turnos lanzando el dado.");
-                return;
-            }
+    if (faseSorteo) {
+        javax.swing.JOptionPane.showMessageDialog(this,
+                "Primero deben definir los turnos lanzando el dado.");
+        return;
+    }
 
-            Jugador jugadorEnTurno = obtenerJugadorEnTurno();
-            if (jugadorEnTurno == null) {
-                javax.swing.JOptionPane.showMessageDialog(this, "No hay jugador en turno.");
-                return;
-            }
-            this.partida.getMazo().escogerCarta(jugadorEnTurno);
-            repaint();
-        }
+    // VERIFICAR si hay una casilla de hallazgo activa
+    if (!this.partida.hayCasillaHallazgoActiva()) {
+        javax.swing.JOptionPane.showMessageDialog(this,
+                "No estás en una casilla de hallazgo. No puedes tomar cartas ahora.");
+        return;
+    }
+
+    Jugador jugadorEnTurno = obtenerJugadorEnTurno();
+    if (jugadorEnTurno == null) {
+        javax.swing.JOptionPane.showMessageDialog(this, "No hay jugador en turno.");
+        return;
+    }
+    
+    // LLAMAR AL MÉTODO CORRECTO
+    this.partida.procesarSeleccionCarta(jugadorEnTurno);
+    
+    repaint();
+}//boton mazo
     }
 
     private void procesarMovimientoJuego() {
