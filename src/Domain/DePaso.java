@@ -21,13 +21,15 @@ public class DePaso extends Casilla{
   
     
     public void efecto(Jugador jugadorEnTurno, int numeroDado) {
-        jugadorEnTurno.setPaso(jugadorEnTurno.getPaso()+numeroDado);
+       // Casilla de paso no hace nada especial
+        System.out.println("Casilla de paso - continúa normalmente");
+
     }//efecto x
  
 
     @Override
     public void dibujar(Graphics g, int x, int y, int ancho, int alto) {
-        // Dibujar rectángulo base
+        // Dibujar rectángulo 
     g.setColor(Color.green);
     g.fillRect(x, y, ancho, alto);
     g.setColor(Color.BLACK);

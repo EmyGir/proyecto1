@@ -6,6 +6,7 @@ package Domain;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -23,9 +24,11 @@ public class TrampaDeDinosaurio extends Casilla{
     
     @Override
     public void efecto(Jugador jugadorEnTurno) {
+        JOptionPane.showMessageDialog(null, 
+            "¡Caíste en una trampa de dinosaurio! Vuelves al inicio.");
+
       jugadorEnTurno.setPaso(0);
-      jugadorEnTurno.setPosX(50);
-      jugadorEnTurno.setPosY(50);
+     
     }
 
   public void dibujar(Graphics g, int x, int y, int ancho, int alto) {

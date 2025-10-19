@@ -4,6 +4,8 @@
  */
 package Domain;
 
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author emily
@@ -16,8 +18,15 @@ public class Recompensa extends Carta{
 
     @Override
     public void efecto(Jugador jugador) {
-        System.out.println("Domain.Recompensa.efecto()");
-    }
+         int resultado = (int) (Math.random() * 2) + 1;
+        if(resultado == 1){
+            JOptionPane.showMessageDialog(null, "¡Encontraste un atajo! Avanzas 3 casillas.");
+            jugador.setPaso(jugador.getPaso() + 3);
+        } else {
+            JOptionPane.showMessageDialog(null, "¡Energía extra! Tienes un turno adicional.");
+            jugador.setTurno(true); // Mantiene el turno
+        }
+    }    
 
    
 }//clase

@@ -4,7 +4,6 @@
  */
 package Domain;
 
-import GUI.JPPartida;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
@@ -17,11 +16,21 @@ import javax.swing.JOptionPane;
 public class DeHallazgo extends Casilla {
 
     private Mazo mazo;
+    private boolean esperandoSeleccion; // Nuevo campo
 
     public DeHallazgo(int id, int posY, int posX, Mazo mazo) {
         super(id, posY, posX);
         this.mazo=mazo;
+        this.esperandoSeleccion = false;
       
+    }
+
+    public boolean isEsperandoSeleccion() {
+        return esperandoSeleccion;
+    }
+
+    public void setEsperandoSeleccion(boolean esperandoSeleccion) {
+        this.esperandoSeleccion = esperandoSeleccion;
     }
 
     public Mazo getMazo() {
@@ -39,9 +48,10 @@ public class DeHallazgo extends Casilla {
             
             throw new IllegalStateException("La casilla DeHallazgo no tiene mazo asignado (setMazo).");
         }
-        JOptionPane.showMessageDialog(null, "¡Hallazgo! Toma una carta del mazo.");
+        JOptionPane.showMessageDialog(null, "¡Hallazgo! Toma una carta del mazo."+
+            "Presiona el botón 'Escoger Carta' para tomar una carta del mazo.");
         
-        mazo.escogerCarta(jugadorEnTurno); 
+       this.esperandoSeleccion = true;
     
          
     }//efecto

@@ -18,6 +18,7 @@ public class Partida {
     private Mazo mazo; 
     private boolean juegoIniciado;
     private Jugador jugadorEnTurno;
+     private DeHallazgo casillaHallazgoActiva; 
     public Partida(Jugador[] jugadores) {
         this.jugadores = jugadores;
         this.tablero = new Tablero();
@@ -155,64 +156,88 @@ public class Partida {
 
    
 
-    public void moverJugador(Jugador jugadorEnTurno) {
-        // 1) Valor real del dado (0..5 -> 1..6)
-        int valor = this.dado.getResultadoFinal() + 1;
-        System.out.println("=== MOVIMIENTO ===");
-        System.out.println("Jugador: " + jugadorEnTurno.getNombre());
-        System.out.println("Dado: " + valor);
-        System.out.println("Posición actual: " + jugadorEnTurno.getPaso());
+   public void moverJugador(Jugador jugadorEnTurno) {
+    // 1) Valor real del dado (0..5 -> 1..6)
+    int valor = this.dado.getResultadoFinal() + 1;
+    System.out.println("=== MOVIMIENTO INICIADO ===");
+    System.out.println("Jugador: " + jugadorEnTurno.getNombre());
+    System.out.println("Dado: " + valor);
+    System.out.println("Posición actual: " + jugadorEnTurno.getPaso());
 
-        // 2) Calcular destino
-        int maxId = this.tablero.getCasillas().length * this.tablero.getCasillas()[0].length - 1;
-        int destino = jugadorEnTurno.getPaso() + valor;
-        if (destino > maxId) destino = maxId;
-        if (destino < 0) destino = 0;
+    // 2) Calcular destino
+    int maxId = this.tablero.getCasillas().length * this.tablero.getCasillas()[0].length - 1;
+    int destino = jugadorEnTurno.getPaso() + valor;
+    if (destino > maxId) destino = maxId;
+    if (destino < 0) destino = 0;
 
-        System.out.println("Destino calculado: " + destino);
+    System.out.println("Destino calculado: " + destino);
 
-        // 3) Casilla destino
-        Casilla casilla = obtenerCasillaPorId(destino);
-        if (casilla == null) {
-            System.out.println("ERROR: Casilla " + destino + " no encontrada!");
-            return;
-        }
-        
-        System.out.println("Casilla destino: " + casilla.getClass().getSimpleName() + " ID: " + casilla.getId());
-
-        // 4) Actualizar estado
-        jugadorEnTurno.setPaso(destino);
-        jugadorEnTurno.setPosX(casilla.getPosX());
-        jugadorEnTurno.setPosY(casilla.getPosY());
-
-        System.out.println("Aplicando efecto de: " + casilla.getClass().getSimpleName());
-
-        // 5) Efecto
-        if (casilla instanceof DePaso) {
-            System.out.println("Casilla de paso - sin efecto especial");
-        } else if (casilla instanceof PortalJurasico) {
-            System.out.println("Activando Portal Jurásico");
-            Jugador otro = obtenerOtroJugador(jugadorEnTurno);
-            int posicionPrevia = jugadorEnTurno.getPaso();
-            ((PortalJurasico) casilla).efecto(jugadorEnTurno, otro);
-            System.out.println("Posición cambiada de " + posicionPrevia + " a " + jugadorEnTurno.getPaso());
-        } else {
-            System.out.println("Activando efecto especial");
-            int posicionPrevia = jugadorEnTurno.getPaso();
-            casilla.efecto(jugadorEnTurno);
-            System.out.println("Posición cambiada de " + posicionPrevia + " a " + jugadorEnTurno.getPaso());
-        }
-
-        // 6) Reubicar por si el efecto modificó la posición
-        Casilla casillaNueva = obtenerCasillaPorId(jugadorEnTurno.getPaso());
-        if (casillaNueva != null) {
-            jugadorEnTurno.setPosX(casillaNueva.getPosX());
-            jugadorEnTurno.setPosY(casillaNueva.getPosY());
-            System.out.println("Posición final: " + jugadorEnTurno.getPosX() + "," + jugadorEnTurno.getPosY());
-        }
-
-        cambiarTurno(jugadorEnTurno);
+    // 3) Casilla destino
+    Casilla casilla = obtenerCasillaPorId(destino);
+    if (casilla == null) {
+        System.out.println("ERROR: Casilla " + destino + " no encontrada!");
+        // Forzar posición válida
+        jugadorEnTurno.setPaso(0);
+        casilla = obtenerCasillaPorId(0);
     }
+    
+    System.out.println("Casilla destino: " + casilla.getClass().getSimpleName() + " ID: " + casilla.getId());
+
+    // 4) Actualizar estado ANTES del efecto
+    jugadorEnTurno.setPaso(destino);
+    jugadorEnTurno.setPosX(casilla.getPosX());
+    jugadorEnTurno.setPosY(casilla.getPosY());
+    
+    System.out.println("Posición después de movimiento: " + jugadorEnTurno.getPaso());
+
+    // 5) Aplicar efecto
+    System.out.println("Aplicando efecto de: " + casilla.getClass().getSimpleName());
+    
+    int posicionPrevia = jugadorEnTurno.getPaso();
+    
+    if (casilla instanceof DePaso) {
+        System.out.println("Casilla de paso - sin efecto especial");
+    } else if (casilla instanceof PortalJurasico) {
+        System.out.println("Activando Portal Jurásico");
+        Jugador otro = obtenerOtroJugador(jugadorEnTurno);
+        ((PortalJurasico) casilla).efecto(jugadorEnTurno, otro);
+    } else if (casilla instanceof DeHallazgo) {
+        System.out.println("Activando Casilla de Hallazgo");
+         DeHallazgo hallazgo = (DeHallazgo) casilla;
+            hallazgo.efecto(jugadorEnTurno);
+            this.casillaHallazgoActiva = hallazgo; // Guardar referencia
+    } else if (casilla instanceof TrampaDeDinosaurio) {
+        System.out.println("Activando Trampa de Dinosaurio");
+        casilla.efecto(jugadorEnTurno);
+    } else {
+        System.out.println("Activando efecto genérico");
+        casilla.efecto(jugadorEnTurno);
+    }
+
+    System.out.println("Posición después del efecto: " + jugadorEnTurno.getPaso() + 
+                      " (cambio: " + (jugadorEnTurno.getPaso() - posicionPrevia) + ")");
+
+    // 6) Reubicar SIEMPRE después del efecto
+    Casilla casillaFinal = obtenerCasillaPorId(jugadorEnTurno.getPaso());
+    if (casillaFinal != null) {
+        jugadorEnTurno.setPosX(casillaFinal.getPosX() + 10); // Pequeño offset para visualización
+        jugadorEnTurno.setPosY(casillaFinal.getPosY() + 10);
+        System.out.println("Posición final: " + jugadorEnTurno.getPosX() + "," + jugadorEnTurno.getPosY());
+    } else {
+        System.out.println("ERROR: No se pudo encontrar casilla final ID: " + jugadorEnTurno.getPaso());
+        // Forzar posición válida
+        jugadorEnTurno.setPaso(0);
+        Casilla inicio = obtenerCasillaPorId(0);
+        if (inicio != null) {
+            jugadorEnTurno.setPosX(inicio.getPosX() + 10);
+            jugadorEnTurno.setPosY(inicio.getPosY() + 10);
+        }
+    }
+
+    cambiarTurno(jugadorEnTurno);
+    System.out.println("=== MOVIMIENTO TERMINADO ===\n");
+}//mover jugador
+   
 
     public void cambiarTurno(Jugador actual) {
         int idx = -1;
@@ -254,6 +279,40 @@ public class Partida {
         return actual; // defensa si solo hay uno
     }//obtener jugadores
 
+public void iniciarJuego() {
+    this.juegoIniciado = true;
+    // Establecer turno del primer jugador
+    for (Jugador jugador : jugadores) {
+        if (jugador.isTurno()) {
+            this.jugadorEnTurno = jugador;
+            break;
+        }
+    }
+    System.out.println("Juego iniciado. Primer turno: " + this.jugadorEnTurno.getNombre());
+}//iniciar juego
+
+public Carta procesarSeleccionCarta(Jugador jugador) {
+        if (casillaHallazgoActiva != null && casillaHallazgoActiva.isEsperandoSeleccion()) {
+            Carta carta = this.mazo.escogerCarta(jugador);
+            casillaHallazgoActiva.setEsperandoSeleccion(false); // Resetear estado
+            casillaHallazgoActiva = null; // Limpiar referencia
+            return carta;
+        }
+        return null;
+    }
+    
+    // Método para verificar si hay casilla de hallazgo activa
+    public boolean hayCasillaHallazgoActiva() {
+        return casillaHallazgoActiva != null && casillaHallazgoActiva.isEsperandoSeleccion();
+    }
+    
+    // Método para obtener el mensaje de la casilla activa
+    public String getMensajeCasillaHallazgo() {
+        if (hayCasillaHallazgoActiva()) {
+            return "Debes tomar una carta del mazo por haber caído en casilla de hallazgo";
+        }
+        return null;
+    }
 
     
 }//clase
